@@ -2,10 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef } from 'react';
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import { fetchLiveDevices } from '../api/devices';
 import { useTranslation } from 'react-i18next';
 
-mapboxgl.accessToken = 'your-mapbox-token';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZHdiZXppZWsiLCJhIjoiY2s4NjM2Z2lpMDB2MDNtcHJndnYyeHQ5dyJ9.hMUfwxksjvbLW-R8WkKxhA';
 
 export const DeviceMap = () => {
     const mapContainer = useRef(null);
@@ -14,9 +13,13 @@ export const DeviceMap = () => {
     const theme = useTheme();
 
     const { data, isLoading } = useQuery({
-        queryKey: ['liveDevices'],
-        queryFn: fetchLiveDevices,
-        refetchInterval: 5000,
+        queryKey: ['liveDeviceData'],
+        queryFn: async () => {
+            const response = await fetch('http://localhost:8080/api/device-data/live'); // Adjust to your API URL
+            if (!response.ok) throw new Error('Failed to fetch live device data');
+            return response.json();
+        },
+        refetchInterval: 5000, // Sync with your 5-second simulator
     });
 
     useEffect(() => {
@@ -24,20 +27,29 @@ export const DeviceMap = () => {
             map.current = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: theme.palette.mode === 'light' ? 'mapbox://styles/mapbox/light-v11' : 'mapbox://styles/mapbox/dark-v11',
-                center: [0, 0],
+                center: [20, -30], // Rough center for South Africa to Europe
                 zoom: 2,
             });
         }
 
-        if (data && map.current) {
+        if (data && map.current && data.results) {
             map.current.on('load', () => {
-                data.forEach((device) => {
-                    const temp = device.sensorData.find((s) => s.sensorType === 'TEMPERATURE')?.value || 'N/A';
-                    new mapboxgl.Marker({ color: temp > 8 ? '#d32f2f' : '#2e7d32' })
-                        .setLngLat([device.longitude, device.latitude])
-                        .setPopup(new mapboxgl.Popup().setText(`${device.imei} - Temp: ${temp}°C`))
+                // Clear existing markers
+                document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove());
+
+                data.results.forEach((deviceData: any) => {
+                    const tempSensor = deviceData.sensorDataEntityList.find((sensor: any) => sensor.sensorType === 'TEMPERATURE');
+                    const temperature = tempSensor ? tempSensor.value : 'N/A';
+                    new mapboxgl.Marker({ color: temperature > 8 ? '#d32f2f' : '#2e7d32' })
+                        .setLngLat([deviceData.longitude, deviceData.latitude])
+                        .setPopup(new mapboxgl.Popup().setText(`${deviceData.device.imei} - Temp: ${temperature}°C`))
                         .addTo(map.current!);
                 });
+
+                // Auto-fit bounds to show all markers
+                const bounds = new mapboxgl.LngLatBounds();
+                data.results.forEach((d: any) => bounds.extend([d.longitude, d.latitude]));
+                map.current.fitBounds(bounds, { padding: 50 });
             });
         }
     }, [data, theme.palette.mode]);
