@@ -115,10 +115,10 @@ export const DashboardLayout = () => {
                 color: theme.palette.text.primary,
                 transition: 'background-color 0.3s ease',
                 mt: '64px',
-                pt: 0, // Minimal top padding
+                pt: 0, // No top padding
             }}
         >
-            <List sx={{ flexGrow: 1 }}>
+            <List sx={{ flexGrow: 1, pt: 0 }}> {/* Remove List padding */}
                 {menuItems.map((item, index) => (
                     <Box key={item.text}>
                         {item.category && !isMinimal && (
@@ -152,8 +152,10 @@ export const DashboardLayout = () => {
                                 '&:hover': {
                                     bgcolor: theme.palette.action.hover,
                                     transition: 'background-color 0.2s ease',
+                                    cursor: 'pointer', // Ensure hand cursor
                                 },
                                 transition: 'all 0.2s ease',
+                                cursor: 'pointer', // Consistent with theme button
                             }}
                         >
                             <ListItemIcon
@@ -192,12 +194,17 @@ export const DashboardLayout = () => {
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 2, // Consistent padding
+                        py: 2,
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',
-                        '&:hover': { bgcolor: theme.palette.action.hover, transition: 'background-color 0.2s ease' },
+                        '&:hover': {
+                            bgcolor: theme.palette.action.hover,
+                            transition: 'background-color 0.2s ease',
+                            cursor: 'pointer', // Ensure hand cursor
+                        },
                         transition: 'all 0.2s ease',
+                        cursor: 'pointer', // Consistent with theme button
                     }}
                 >
                     <ListItemIcon
