@@ -71,7 +71,7 @@ export const Navbar = () => {
           <List>
             {menuItems.map((item) => (
               <ListItem
-                button
+                button={true}
                 key={item.text}
                 onClick={() => {
                   navigate(item.path);
@@ -85,7 +85,7 @@ export const Navbar = () => {
           <Divider />
           <List>
             <ListItem
-              button
+              button={true}
               onClick={handleLogout}>
               <ListItemIcon>
                 <LogoutIcon />

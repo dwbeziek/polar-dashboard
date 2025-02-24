@@ -138,7 +138,7 @@ export const DashboardLayout = () => {
                             <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', my: 1 }} />
                         )}
                         <ListItem
-                            button
+                            component="button" // Use component prop to avoid button attribute warning
                             onClick={() => {
                                 navigate(item.path);
                                 if (isMobile) setMobileOpen(false);
@@ -191,10 +191,10 @@ export const DashboardLayout = () => {
             />
             <List sx={{ py: 0 }}>
                 <ListItem
-                    button
+                    component="button" // Use component prop to avoid button attribute warning
                     onClick={handleLogout}
                     sx={{
-                        py: 1.5, // Reverted to earlier working padding
+                        py: 1.5,
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',
@@ -326,8 +326,8 @@ export const DashboardLayout = () => {
                         boxSizing: 'border-box',
                         borderRight: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                         top: '64px',
-                        height: 'calc(100vh - 64px)', // Adjusted to viewport height
-                        overflowY: 'auto', // Explicit overflow control
+                        maxHeight: 'calc(100vh - 64px)',
+                        overflowY: 'hidden',
                         transition: theme.transitions.create(['width'], {
                             easing: theme.transitions.easing.sharp,
                             duration: theme.transitions.duration.enteringScreen,

@@ -58,6 +58,7 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
+                        autoComplete="username" // Ensure autofill triggers
                     />
                 </Box>
                 <Box sx={{ mt: 2 }}>
@@ -71,6 +72,7 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
+                        autoComplete="current-password" // Ensure autofill triggers
                     />
                 </Box>
                 <Button
