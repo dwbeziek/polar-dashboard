@@ -30,13 +30,13 @@ export const Login = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 minHeight: '100vh',
-                bgcolor: theme.palette.mode === 'light' ? '#fcfcfc' : '#0d1117',
+                bgcolor: theme.palette.mode === 'light' ? '#f5f5f5' : '#0d1117',
                 transition: 'all 0.3s ease',
             }}
         >
             <Paper
                 sx={{
-                    p: 3, // Reduced padding for tighter look
+                    p: 3,
                     borderRadius: 2,
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     maxWidth: 400,
@@ -56,7 +56,15 @@ export const Login = () => {
                     margin="normal"
                     variant="outlined"
                     size="small"
-                    sx={{ transition: 'all 0.2s ease' }}
+                    sx={{
+                        transition: 'all 0.2s ease',
+                        '& .MuiOutlinedInput-root': {
+                            bgcolor: theme.palette.background.paper,
+                            '& fieldset': { borderColor: theme.palette.grey[200] },
+                            '&:hover fieldset': { borderColor: theme.palette.grey[600] },
+                            '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                        },
+                    }}
                 />
                 <TextField
                     label={t('password')}
@@ -67,7 +75,15 @@ export const Login = () => {
                     margin="normal"
                     variant="outlined"
                     size="small"
-                    sx={{ transition: 'all 0.2s ease' }}
+                    sx={{
+                        transition: 'all 0.2s ease',
+                        '& .MuiOutlinedInput-root': {
+                            bgcolor: theme.palette.background.paper,
+                            '& fieldset': { borderColor: theme.palette.grey[200] },
+                            '&:hover fieldset': { borderColor: theme.palette.grey[600] },
+                            '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                        },
+                    }}
                 />
                 <Button
                     variant="contained"

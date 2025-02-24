@@ -115,6 +115,7 @@ export const DashboardLayout = () => {
                 color: theme.palette.text.primary,
                 transition: 'background-color 0.3s ease',
                 mt: '64px',
+                pt: 0,
             }}
         >
             <List sx={{ flexGrow: 1 }}>
@@ -125,8 +126,7 @@ export const DashboardLayout = () => {
                                 variant="body2"
                                 sx={{
                                     px: 2,
-                                    py: 1,
-                                    pt: index === 0 ? 1 : 1, // Reduced top padding for first item
+                                    py: 0.5,
                                     color: theme.palette.text.secondary,
                                     fontWeight: 600,
                                 }}
@@ -179,8 +179,8 @@ export const DashboardLayout = () => {
                     </Box>
                 ))}
             </List>
-            <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d' }} />
-            <List>
+            <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', height: '1px', my: 0 }} />
+            <List sx={{ p: 0 }}>
                 <ListItem
                     button
                     onClick={handleLogout}
@@ -210,132 +210,6 @@ export const DashboardLayout = () => {
                     )}
                 </ListItem>
             </List>
-        </Box>
-    );
-
-    return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                elevation={0}
-                sx={{
-                    zIndex: theme.zIndex.drawer + 1,
-                    bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.paper,
-                    borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                    width: '100%',
-                    transition: theme.transitions.create('background-color', {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen,
-                    }),
-                }}
-            >
-                <Toolbar>
-                    <IconButton
-                        edge="start"
-                        onClick={toggleSidebar}
-                        sx={{
-                            mr: 2,
-                            color: theme.palette.text.secondary,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            borderRadius: 1,
-                            p: 0.5,
-                        }}
-                    >
-                        {isMinimal ? <MenuIcon /> : <MenuOpenIcon />}
-                    </IconButton>
-                    <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flexGrow: 1 }} onClick={handleTitleClick}>
-                        <Box
-                            component="img"
-                            src="/logo.png"
-                            alt="Logo"
-                            sx={{ height: 28, mr: 1, display: { xs: 'none', sm: 'block' } }}
-                        />
-                        <Typography variant="h6" noWrap sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
-                            Cryolytix
-                        </Typography>
-                    </Box>
-                    <Button
-                        onClick={handleLanguageMenuOpen}
-                        sx={{
-                            color: theme.palette.text.secondary,
-                            textTransform: 'none',
-                            mr: 1,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            borderRadius: 1,
-                            p: '6px 12px',
-                        }}
-                    >
-                        {currentLang.flag} {currentLang.name}
-                    </Button>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleLanguageMenuClose}
-                        sx={{ '& .MuiPaper-root': { bgcolor: theme.palette.background.paper } }}
-                    >
-                        {languages.map((lang) => (
-                            <MenuItem
-                                key={lang.code}
-                                onClick={() => handleLanguageChange(lang.code)}
-                                sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}
-                            >
-                                {lang.flag} {lang.name}
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                    <IconButton
-                        onClick={toggleTheme}
-                        sx={{
-                            color: theme.palette.text.secondary,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            borderRadius: 1,
-                            p: 0.5,
-                        }}
-                    >
-                        {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant={isMobile ? 'temporary' : 'permanent'}
-                open={isMobile ? mobileOpen : true}
-                onClose={() => setMobileOpen(false)}
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                        borderRight: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                        top: '64px',
-                        height: 'calc(100% - 64px)',
-                        transition: theme.transitions.create(['width'], {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.enteringScreen,
-                        }),
-                    },
-                }}
-            >
-                {drawerContent}
-            </Drawer>
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: 3,
-                    mt: '64px',
-                    bgcolor: theme.palette.mode === 'light' ? '#fcfcfc' : '#0d1117',
-                    minHeight: '100vh',
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    transition: theme.transitions.create('background-color', {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen,
-                    }),
-                }}
-            >
-                <Outlet />
-            </Box>
         </Box>
     );
 };
