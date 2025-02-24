@@ -144,9 +144,9 @@ export const DashboardLayout = () => {
                                 if (isMobile) setMobileOpen(false);
                             }}
                             sx={{
-                                py: 1,
+                                py: 0.75,
                                 mx: isMinimal ? 0 : 1,
-                                borderRadius: isMinimal ? 0 : 1, // Rounded corners only
+                                borderRadius: isMinimal ? 0 : 1,
                                 bgcolor: location.pathname === item.path ? theme.palette.action.selected : 'transparent',
                                 justifyContent: isMinimal ? 'center' : 'flex-start',
                                 '&:hover': {
@@ -156,7 +156,7 @@ export const DashboardLayout = () => {
                                 },
                                 transition: 'all 0.2s ease',
                                 cursor: 'pointer',
-                                border: 'none', // Explicitly remove borders
+                                border: 'none',
                             }}
                         >
                             <ListItemIcon
@@ -197,16 +197,17 @@ export const DashboardLayout = () => {
                     sx={{
                         py: 1.5,
                         mx: isMinimal ? 0 : 1,
-                        borderRadius: isMinimal ? 0 : 1, // Rounded corners only
+                        borderRadius: 0, // No rounding for logout
+                        bgcolor: 'transparent', // Distinct from menu items
                         justifyContent: isMinimal ? 'center' : 'flex-start',
                         '&:hover': {
-                            bgcolor: theme.palette.action.hover,
+                            bgcolor: mode === 'light' ? '#f5f6fa' : '#21262d', // Subtle hover distinct from menu
                             transition: 'background-color 0.2s ease',
                             cursor: 'pointer',
                         },
                         transition: 'all 0.2s ease',
                         cursor: 'pointer',
-                        border: 'none', // Explicitly remove borders
+                        border: 'none',
                     }}
                 >
                     <ListItemIcon
@@ -329,7 +330,7 @@ export const DashboardLayout = () => {
                         borderRight: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                         top: '64px',
                         maxHeight: 'calc(100vh - 64px)',
-                        overflowY: 'hidden', // Still hidden, but we'll debug scrollbar
+                        overflowY: 'hidden',
                         transition: theme.transitions.create(['width'], {
                             easing: theme.transitions.easing.sharp,
                             duration: theme.transitions.duration.enteringScreen,
