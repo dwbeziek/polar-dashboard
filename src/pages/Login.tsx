@@ -64,6 +64,9 @@ export const Login = () => {
                             '&:hover fieldset': { borderColor: theme.palette.grey[600] },
                             '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
                         },
+                        '& .MuiInputBase-input': {
+                            bgcolor: theme.palette.background.paper, // Explicitly set input bg
+                        },
                     }}
                 />
                 <TextField
@@ -82,6 +85,9 @@ export const Login = () => {
                             '& fieldset': { borderColor: theme.palette.grey[200] },
                             '&:hover fieldset': { borderColor: theme.palette.grey[600] },
                             '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                        },
+                        '& .MuiInputBase-input': {
+                            bgcolor: theme.palette.background.paper, // Explicitly set input bg
                         },
                     }}
                 />
