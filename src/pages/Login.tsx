@@ -58,7 +58,12 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        autoComplete="username" // Ensure autofill triggers
+                        autoComplete="username"
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: theme.palette.background.paper, // Fallback
+                            },
+                        }}
                     />
                 </Box>
                 <Box sx={{ mt: 2 }}>
@@ -72,7 +77,12 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        autoComplete="current-password" // Ensure autofill triggers
+                        autoComplete="current-password"
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: theme.palette.background.paper, // Fallback
+                            },
+                        }}
                     />
                 </Box>
                 <Button
