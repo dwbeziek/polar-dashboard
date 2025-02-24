@@ -115,7 +115,7 @@ export const DashboardLayout = () => {
                 color: theme.palette.text.primary,
                 transition: 'background-color 0.3s ease',
                 mt: '64px',
-                pt: 1, // Minimal padding
+                pt: 1,
             }}
         >
             <List sx={{ flexGrow: 1 }}>
@@ -180,12 +180,12 @@ export const DashboardLayout = () => {
                 ))}
             </List>
             <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', height: '1px', my: 0 }} />
-            <List sx={{ p: 0 }}>
+            <List sx={{ py: 0 }}>
                 <ListItem
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 1,
+                        py: 1.5, // Increased padding for more height
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',

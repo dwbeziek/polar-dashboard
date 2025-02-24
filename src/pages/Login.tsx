@@ -48,49 +48,57 @@ export const Login = () => {
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary, textAlign: 'center' }}>
                     {t('login')}
                 </Typography>
-                <TextField
-                    label={t('username')}
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                        transition: 'all 0.2s ease',
-                        '& .MuiOutlinedInput-root': {
-                            bgcolor: theme.palette.background.paper,
-                            '& fieldset': { borderColor: theme.palette.grey[200] },
-                            '&:hover fieldset': { borderColor: theme.palette.grey[600] },
-                            '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
-                        },
-                        '& .MuiInputBase-input': {
-                            bgcolor: theme.palette.background.paper, // Explicitly set input bg
-                        },
-                    }}
-                />
-                <TextField
-                    label={t('password')}
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                        transition: 'all 0.2s ease',
-                        '& .MuiOutlinedInput-root': {
-                            bgcolor: theme.palette.background.paper,
-                            '& fieldset': { borderColor: theme.palette.grey[200] },
-                            '&:hover fieldset': { borderColor: theme.palette.grey[600] },
-                            '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
-                        },
-                        '& .MuiInputBase-input': {
-                            bgcolor: theme.palette.background.paper, // Explicitly set input bg
-                        },
-                    }}
-                />
+                <Box>
+                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 0.5 }}>
+                        {t('username')}
+                    </Typography>
+                    <TextField
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            transition: 'all 0.2s ease',
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: theme.palette.background.paper,
+                                '& fieldset': { borderColor: theme.palette.grey[200] },
+                                '&:hover fieldset': { borderColor: theme.palette.grey[600] },
+                                '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                            },
+                            '& .MuiInputBase-input': {
+                                bgcolor: theme.palette.background.paper,
+                                py: 1,
+                            },
+                        }}
+                    />
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 0.5 }}>
+                        {t('password')}
+                    </Typography>
+                    <TextField
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            transition: 'all 0.2s ease',
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: theme.palette.background.paper,
+                                '& fieldset': { borderColor: theme.palette.grey[200] },
+                                '&:hover fieldset': { borderColor: theme.palette.grey[600] },
+                                '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                            },
+                            '& .MuiInputBase-input': {
+                                bgcolor: theme.palette.background.paper,
+                                py: 1,
+                            },
+                        }}
+                    />
+                </Box>
                 <Button
                     variant="contained"
                     color="primary"
