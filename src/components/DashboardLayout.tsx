@@ -115,10 +115,10 @@ export const DashboardLayout = () => {
                 color: theme.palette.text.primary,
                 transition: 'background-color 0.3s ease',
                 mt: '64px',
-                pt: 0, // No top padding
+                pt: 0,
             }}
         >
-            <List sx={{ flexGrow: 1, pt: 0 }}> {/* Remove List padding */}
+            <List sx={{ flexGrow: 1, pt: 0 }}>
                 {menuItems.map((item, index) => (
                     <Box key={item.text}>
                         {item.category && !isMinimal && (
@@ -152,10 +152,10 @@ export const DashboardLayout = () => {
                                 '&:hover': {
                                     bgcolor: theme.palette.action.hover,
                                     transition: 'background-color 0.2s ease',
-                                    cursor: 'pointer', // Ensure hand cursor
+                                    cursor: 'pointer',
                                 },
                                 transition: 'all 0.2s ease',
-                                cursor: 'pointer', // Consistent with theme button
+                                cursor: 'pointer',
                             }}
                         >
                             <ListItemIcon
@@ -194,17 +194,17 @@ export const DashboardLayout = () => {
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 2,
+                        py: 1.5, // Reverted to earlier working padding
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',
                         '&:hover': {
                             bgcolor: theme.palette.action.hover,
                             transition: 'background-color 0.2s ease',
-                            cursor: 'pointer', // Ensure hand cursor
+                            cursor: 'pointer',
                         },
                         transition: 'all 0.2s ease',
-                        cursor: 'pointer', // Consistent with theme button
+                        cursor: 'pointer',
                     }}
                 >
                     <ListItemIcon
@@ -326,7 +326,8 @@ export const DashboardLayout = () => {
                         boxSizing: 'border-box',
                         borderRight: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                         top: '64px',
-                        height: 'calc(100% - 64px)',
+                        height: 'calc(100vh - 64px)', // Adjusted to viewport height
+                        overflowY: 'auto', // Explicit overflow control
                         transition: theme.transitions.create(['width'], {
                             easing: theme.transitions.easing.sharp,
                             duration: theme.transitions.duration.enteringScreen,

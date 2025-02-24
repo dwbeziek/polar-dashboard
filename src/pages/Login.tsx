@@ -58,9 +58,6 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        InputProps={{
-                            style: { backgroundColor: theme.palette.background.paper }, // Direct style override
-                        }}
                     />
                 </Box>
                 <Box sx={{ mt: 2 }}>
@@ -74,9 +71,6 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        InputProps={{
-                            style: { backgroundColor: theme.palette.background.paper }, // Direct style override
-                        }}
                     />
                 </Box>
                 <Button
