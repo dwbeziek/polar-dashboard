@@ -64,7 +64,8 @@ export const DeviceMap = () => {
                     bgcolor: theme.palette.background.paper,
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     borderRadius: 1,
-                    height: '600px',
+                    height: 'calc(93.5vh - 100px)', // Full height minus header/footer
+                    width: '100%',
                     transition: 'all 0.2s ease',
                 }}
             >
