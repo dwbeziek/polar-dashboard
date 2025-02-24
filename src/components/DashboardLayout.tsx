@@ -115,7 +115,7 @@ export const DashboardLayout = () => {
                 color: theme.palette.text.primary,
                 transition: 'background-color 0.3s ease',
                 mt: '64px',
-                pt: 1,
+                pt: 0, // Minimal top padding
             }}
         >
             <List sx={{ flexGrow: 1 }}>
@@ -126,7 +126,7 @@ export const DashboardLayout = () => {
                                 variant="body2"
                                 sx={{
                                     px: 2,
-                                    py: 0.5,
+                                    py: 0.25,
                                     color: theme.palette.text.secondary,
                                     fontWeight: 600,
                                 }}
@@ -183,7 +183,7 @@ export const DashboardLayout = () => {
                 sx={{
                     bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d',
                     height: '1px',
-                    border: 'none', // Ensure no extra border
+                    border: 'none',
                     my: 0,
                 }}
             />
@@ -192,7 +192,7 @@ export const DashboardLayout = () => {
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 1.5,
+                        py: 2, // Consistent padding
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',

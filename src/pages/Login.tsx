@@ -58,16 +58,6 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        sx={{
-                            transition: 'all 0.2s ease',
-                            '& .MuiOutlinedInput-root': {
-                                bgcolor: theme.palette.background.paper,
-                                '& fieldset': { borderColor: theme.palette.grey[200] },
-                                '&:hover fieldset': { borderColor: theme.palette.grey[600] },
-                                '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
-                                '& input': { bgcolor: theme.palette.background.paper }, // Higher specificity
-                            },
-                        }}
                     />
                 </Box>
                 <Box sx={{ mt: 2 }}>
@@ -81,16 +71,6 @@ export const Login = () => {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        sx={{
-                            transition: 'all 0.2s ease',
-                            '& .MuiOutlinedInput-root': {
-                                bgcolor: theme.palette.background.paper,
-                                '& fieldset': { borderColor: theme.palette.grey[200] },
-                                '&:hover fieldset': { borderColor: theme.palette.grey[600] },
-                                '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
-                                '& input': { bgcolor: theme.palette.background.paper }, // Higher specificity
-                            },
-                        }}
                     />
                 </Box>
                 <Button
@@ -98,7 +78,7 @@ export const Login = () => {
                     color="primary"
                     onClick={handleLogin}
                     fullWidth
-                    sx={{ mt: 2, transition: 'all 0.2s ease' }}
+                    sx={{ mt: 2 }}
                 >
                     {t('login')}
                 </Button>
