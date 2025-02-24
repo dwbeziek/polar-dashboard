@@ -41,7 +41,7 @@ export const Reports = () => {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: theme.palette.text.primary }}>{t('reports')}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('reports')}</Typography>
             <Box
                 sx={{
                     bgcolor: theme.palette.background.paper,

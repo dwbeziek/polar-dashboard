@@ -17,7 +17,7 @@ export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
             palette: {
               mode,
               primary: {
-                main: mode === 'light' ? '#1a73e8' : '#58a6ff',
+                main: mode === 'light' ? '#24292f' : '#c9d1d9', // Dark in light, light in dark
               },
               secondary: { main: '#0288d1' },
               error: { main: '#d32f2f' },
@@ -27,11 +27,11 @@ export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
                 paper: mode === 'light' ? '#ffffff' : '#161b22',
               },
               grey: {
-                50: '#f5f6fa',   // Toolbar/Sidebar top light
-                200: '#e5e7eb',   // Light mode border
-                600: '#8d949e',   // Toolpad secondary text
-                800: '#24292f',   // Toolpad dark text
-                900: '#30363d',   // Dark mode border
+                50: '#f5f6fa',
+                200: '#e5e7eb',
+                600: '#8d949e',
+                800: '#24292f',
+                900: '#30363d',
               },
               text: {
                 primary: mode === 'light' ? '#24292f' : '#c9d1d9',
@@ -72,10 +72,10 @@ export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
                   },
                   contained: {
                     boxShadow: 'none',
-                    backgroundColor: mode === 'light' ? '#1a73e8' : '#212121',
-                    color: mode === 'light' ? '#fff' : '#c9d1d9',
+                    backgroundColor: mode === 'light' ? '#24292f' : '#c9d1d9',
+                    color: mode === 'light' ? '#ffffff' : '#24292f', // White text in light, dark text in dark
                     '&:hover': {
-                      backgroundColor: mode === 'light' ? '#1557b0' : '#30363d',
+                      backgroundColor: mode === 'light' ? '#1c2526' : '#b0b8c4',
                     },
                   },
                 },

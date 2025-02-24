@@ -12,7 +12,7 @@ export const Settings = () => {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: theme.palette.text.primary }}>{t('settings')}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('settings')}</Typography>
             <Box
                 sx={{
                     bgcolor: theme.palette.background.paper,

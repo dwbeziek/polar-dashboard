@@ -36,7 +36,7 @@ export const Login = () => {
         >
             <Paper
                 sx={{
-                    p: 4,
+                    p: 3, // Reduced padding for tighter look
                     borderRadius: 2,
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     maxWidth: 400,
@@ -45,7 +45,7 @@ export const Login = () => {
                     transition: 'all 0.3s ease',
                 }}
             >
-                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: theme.palette.text.primary, textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary, textAlign: 'center' }}>
                     {t('login')}
                 </Typography>
                 <TextField

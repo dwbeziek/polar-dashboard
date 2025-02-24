@@ -23,17 +23,17 @@ export const Dashboard = () => {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: theme.palette.text.primary }}>{t('dashboard')}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('dashboard')}</Typography>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={4}>
                     <Card
                         sx={{
                             bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`, // Fixed mode reference
+                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                             transition: 'all 0.2s ease',
                         }}
                     >
-                        <CardContent>
+                        <CardContent sx={{ p: 2 }}>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('totalDevices')}</Typography>
                             <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{totalDevices}</Typography>
                         </CardContent>
@@ -43,11 +43,11 @@ export const Dashboard = () => {
                     <Card
                         sx={{
                             bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`, // Fixed mode reference
+                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                             transition: 'all 0.2s ease',
                         }}
                     >
-                        <CardContent>
+                        <CardContent sx={{ p: 2 }}>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('activeAlerts')}</Typography>
                             <Typography variant="h4" sx={{ fontWeight: 600, color: alerts > 0 ? theme.palette.error.main : theme.palette.success.main }}>{alerts}</Typography>
                         </CardContent>
@@ -57,11 +57,11 @@ export const Dashboard = () => {
                     <Card
                         sx={{
                             bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`, // Fixed mode reference
+                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                             transition: 'all 0.2s ease',
                         }}
                     >
-                        <CardContent>
+                        <CardContent sx={{ p: 2 }}>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('avgTemperature')}</Typography>
                             <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{avgTemp.toFixed(1)}°C</Typography>
                         </CardContent>

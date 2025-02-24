@@ -59,8 +59,8 @@ export const Devices = () => {
 
   return (
       <Box>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: theme.palette.text.primary }}>{t('devices')}</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('devices')}</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
           <TextField
               label={t('search')}
               value={search}

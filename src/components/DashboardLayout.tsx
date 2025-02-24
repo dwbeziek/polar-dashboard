@@ -120,16 +120,22 @@ export const DashboardLayout = () => {
             <List sx={{ flexGrow: 1 }}>
                 {menuItems.map((item, index) => (
                     <Box key={item.text}>
-                        {item.category && !isMinimal && index > 0 && (
-                            <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', my: 1 }} />
-                        )}
                         {item.category && !isMinimal && (
                             <Typography
                                 variant="body2"
-                                sx={{ px: 2, py: 1, color: theme.palette.text.secondary, fontWeight: 500 }}
+                                sx={{
+                                    px: 2,
+                                    py: 1,
+                                    pt: index === 0 ? 1 : 1, // Reduced top padding for first item
+                                    color: theme.palette.text.secondary,
+                                    fontWeight: 600,
+                                }}
                             >
                                 {item.category}
                             </Typography>
+                        )}
+                        {item.category && !isMinimal && index > 0 && (
+                            <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', my: 1 }} />
                         )}
                         <ListItem
                             button
@@ -138,12 +144,15 @@ export const DashboardLayout = () => {
                                 if (isMobile) setMobileOpen(false);
                             }}
                             sx={{
-                                py: 1.5,
+                                py: 1,
                                 mx: isMinimal ? 0 : 1,
-                                borderRadius: isMinimal ? 0 : 4,
+                                borderRadius: isMinimal ? 0 : 1,
                                 bgcolor: location.pathname === item.path ? theme.palette.action.selected : 'transparent',
                                 justifyContent: isMinimal ? 'center' : 'flex-start',
-                                '&:hover': { bgcolor: theme.palette.action.hover, transition: 'background-color 0.2s ease' },
+                                '&:hover': {
+                                    bgcolor: theme.palette.action.hover,
+                                    transition: 'background-color 0.2s ease',
+                                },
                                 transition: 'all 0.2s ease',
                             }}
                         >
@@ -161,6 +170,7 @@ export const DashboardLayout = () => {
                                     primary={item.text}
                                     primaryTypographyProps={{
                                         fontWeight: 500,
+                                        fontSize: '0.875rem',
                                         color: location.pathname === item.path ? theme.palette.text.primary : theme.palette.text.secondary,
                                     }}
                                 />
@@ -175,9 +185,9 @@ export const DashboardLayout = () => {
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 1.5,
+                        py: 1,
                         mx: isMinimal ? 0 : 1,
-                        borderRadius: isMinimal ? 0 : 4,
+                        borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',
                         '&:hover': { bgcolor: theme.palette.action.hover, transition: 'background-color 0.2s ease' },
                         transition: 'all 0.2s ease',
@@ -195,7 +205,7 @@ export const DashboardLayout = () => {
                     {!isMinimal && (
                         <ListItemText
                             primary={`${t('logout')} (${user?.role || 'User'})`}
-                            primaryTypographyProps={{ color: theme.palette.text.secondary, fontWeight: 500 }}
+                            primaryTypographyProps={{ color: theme.palette.text.secondary, fontWeight: 500, fontSize: '0.875rem' }}
                         />
                     )}
                 </ListItem>
@@ -242,7 +252,7 @@ export const DashboardLayout = () => {
                             sx={{ height: 28, mr: 1, display: { xs: 'none', sm: 'block' } }}
                         />
                         <Typography variant="h6" noWrap sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
-                            IoT Toolpad
+                            Cryolytix
                         </Typography>
                     </Box>
                     <Button
@@ -268,7 +278,7 @@ export const DashboardLayout = () => {
                             <MenuItem
                                 key={lang.code}
                                 onClick={() => handleLanguageChange(lang.code)}
-                                sx={{ color: theme.palette.text.primary }}
+                                sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}
                             >
                                 {lang.flag} {lang.name}
                             </MenuItem>
@@ -313,7 +323,7 @@ export const DashboardLayout = () => {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    p: 4,
+                    p: 3,
                     mt: '64px',
                     bgcolor: theme.palette.mode === 'light' ? '#fcfcfc' : '#0d1117',
                     minHeight: '100vh',

@@ -63,7 +63,7 @@ export const DeviceDetails = () => {
 
     return (
         <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{device?.name}</Typography>
                 <Button variant="contained" color="primary" onClick={handleEdit} sx={{ transition: 'all 0.2s ease' }}>
                     {t('editDevice')}
@@ -75,7 +75,7 @@ export const DeviceDetails = () => {
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     borderRadius: 1,
                     p: 2,
-                    mb: 3,
+                    mb: 2,
                     transition: 'all 0.2s ease',
                 }}
             >
@@ -95,7 +95,7 @@ export const DeviceDetails = () => {
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     borderRadius: 1,
                     p: 2,
-                    mb: 3,
+                    mb: 2,
                     transition: 'all 0.2s ease',
                 }}
             >
@@ -117,7 +117,7 @@ export const DeviceDetails = () => {
                     border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                     borderRadius: 1,
                     p: 2,
-                    mb: 3,
+                    mb: 2,
                     transition: 'all 0.2s ease',
                 }}
             >
@@ -140,7 +140,7 @@ export const DeviceDetails = () => {
                         border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
                         borderRadius: 1,
                         p: 2,
-                        mb: 3,
+                        mb: 2,
                         transition: 'all 0.2s ease',
                     }}
                 >
