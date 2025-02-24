@@ -19,29 +19,3 @@ body,
     transition: background-color 0.3s ease;
 }
 
-.MuiOutlinedInput-root {
-    background-color: inherit !important;
-}
-
-/* Override browser autofill styles */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px inherit inset !important;
-    -webkit-text-fill-color: inherit !important;
-    background-color: inherit !important;
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-/* Specific fix for dark theme */
-@media (prefers-color-scheme: dark) {
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 30px #161b22 inset !important; /* Explicit dark bg */
-        -webkit-text-fill-color: #c9d1d9 !important; /* Match dark theme text */
-        background-color: #161b22 !important;
-    }
-}

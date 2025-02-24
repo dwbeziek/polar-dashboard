@@ -12,7 +12,7 @@ export const getTheme = (mode: 'light' | 'dark') =>
             success: { main: '#2e7d32' },
             background: {
                 default: mode === 'light' ? '#fcfcfc' : '#0d1117',
-                paper: mode === 'light' ? '#ffffff' : '#161b22',
+                paper: mode === 'light' ? '#ffffff' : '#161b22', // Correct values
             },
             grey: {
                 50: '#f5f6fa',
