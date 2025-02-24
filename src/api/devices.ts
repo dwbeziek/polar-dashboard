@@ -2,7 +2,7 @@ import api from './axios';
 import { Device, DeviceData } from '../types/device';
 
 export const fetchDevices = async ({ page = 1, search = '' }) => {
-  const { data } = await api.get<{ devices: Device[]; total: number }>('/devices', {
+  const { data } = await api.get<{ devices: Device[]; total: number }>('/api/devices', {
     params: { page, search, limit: 50 },
   });
 
