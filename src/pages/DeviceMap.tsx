@@ -38,7 +38,7 @@ export const DeviceMap = () => {
                 document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove());
 
                 data.results.forEach((deviceData: any) => {
-                    const tempSensor = deviceData.sensorDataEntityList?.find((sensor: any) => sensor.sensorType === 'TEMPERATURE') || {};
+                    const tempSensor = deviceData.sensorData?.find((sensor: any) => sensor.sensorType === 'TEMPERATURE') || {};
                     const temperature = tempSensor.value || 'N/A';
                     new mapboxgl.Marker({ color: temperature > 8 ? '#d32f2f' : '#2e7d32' })
                         .setLngLat([deviceData.longitude, deviceData.latitude])
