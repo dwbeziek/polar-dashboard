@@ -179,13 +179,20 @@ export const DashboardLayout = () => {
                     </Box>
                 ))}
             </List>
-            <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d', height: '1px', my: 0 }} />
+            <Divider
+                sx={{
+                    bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d',
+                    height: '1px',
+                    border: 'none', // Ensure no extra border
+                    my: 0,
+                }}
+            />
             <List sx={{ py: 0 }}>
                 <ListItem
                     button
                     onClick={handleLogout}
                     sx={{
-                        py: 1.5, // Increased padding for more height
+                        py: 1.5,
                         mx: isMinimal ? 0 : 1,
                         borderRadius: isMinimal ? 0 : 1,
                         justifyContent: isMinimal ? 'center' : 'flex-start',
