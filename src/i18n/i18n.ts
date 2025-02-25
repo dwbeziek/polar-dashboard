@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './en.json';
 import es from './es.json';
 import fr from './fr.json';
+import zhCH from './zh-CH.json';
 
 i18n
   .use(initReactI18next)
@@ -11,6 +12,7 @@ i18n
       en: { translation: en },
       es: { translation: es },
       fr: { translation: fr },
+      zhCH: { translation: zhCH },
     },
     lng: 'en', // Default language
     fallbackLng: 'en', // Fallback if translation is missing
