@@ -60,5 +60,7 @@
   "lineChart": "Line Chart",
   "barChart": "Bar Chart",
   "hoursAgo": "hours ago",
-  "humidity": "Humidity"
+  "humidity": "Humidity",
+  "movement_count": "Movement Count",
+  "battery_voltage": "Battery Voltage"
 }

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { fetchLatestDeviceData } from '../api/deviceData';
 import { fetchThresholdsByDevice } from '../api/thresholds';
 import { fetchNotificationsByDevice } from '../api/notifications';
-import { fetchDeviceDetails } from '../api/devices'; // Assuming this exists
+import { fetchDeviceDetails } from '../api/devices';
 import { ChartComponent } from '../components/ChartComponent';
 import { useState, useEffect } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn'; // Location
@@ -14,6 +14,7 @@ import ThermostatIcon from '@mui/icons-material/Thermostat'; // Temp Threshold
 import SpeedIcon from '@mui/icons-material/Speed'; // Speed Threshold
 import WarningIcon from '@mui/icons-material/Warning'; // Default Threshold
 import InfoIcon from '@mui/icons-material/Info'; // Device Info
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull'; // Battery Voltage
 
 export const DeviceDashboard = () => {
     const { id } = useParams<{ id: string }>();
@@ -71,6 +72,8 @@ export const DeviceDashboard = () => {
         switch (sensorType.toLowerCase()) {
             case 'temperature': return <ThermostatIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
             case 'speed': return <SpeedIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
+            case 'movement_count': return <DirectionsRunIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
+            case 'battery_voltage': return <BatteryChargingFullIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
             default: return <WarningIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
         }
     };
@@ -86,9 +89,9 @@ export const DeviceDashboard = () => {
                 </Button>
             </Box>
             <Grid container spacing={2}>
-                {/* Top Row: Device Info, Location, Movement, Thresholds */}
-                <Grid item xs={12} sm={3}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
+                {/* Full-width Device Info */}
+                <Grid item xs={12}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2 }}>
                         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <InfoIcon sx={{ color: theme.palette.info.main, fontSize: 32 }} />
                             <Box>
@@ -108,7 +111,8 @@ export const DeviceDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                {/* Top Row: Location, Movement, Thresholds */}
+                <Grid item xs={12} sm={4}>
                     <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
                         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <LocationOnIcon sx={{ color: theme.palette.primary.main, fontSize: 32 }} />
@@ -129,7 +133,7 @@ export const DeviceDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={4}>
                     <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
                         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <DirectionsRunIcon sx={{ color: theme.palette.secondary.main, fontSize: 32 }} />
@@ -150,7 +154,7 @@ export const DeviceDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={4}>
                     <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem', mb: 1 }}>
