@@ -48,7 +48,7 @@
   "lat": "Latitude",
   "lon": "Longitude",
   "alt": "Altitude",
-  "altitude": "Altitude",
+  "altitude": "Altitude", // Added for ChartComponent
   "movement": "Movement",
   "speed": "Speed",
   "angle": "Angle",
