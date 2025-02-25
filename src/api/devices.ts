@@ -10,23 +10,23 @@ export const fetchDevices = async ({ page = 1, search = '' }) => {
 
 };
 
-export const fetchDevice = async (imei: string) => {
-  const { data } = await api.get<Device>(`/api/devices/${imei}`);
+export const fetchDevice = async (id: string) => {
+  const { data } = await api.get<Device>(`/api/devices/${id}`);
   return data;
 };
 
 export const fetchDeviceData = async (
-  imei: string,
+  deviceId: string,
   { startDate, endDate, page = 1 }: { startDate?: string; endDate?: string; page?: number }
 ) => {
-  const { data } = await api.get<{ data: DeviceData[]; total: number }>(`/api/devices/${imei}/data`, {
+  const { data } = await api.get<{ data: DeviceData[]; total: number }>(`/api/device-data/${deviceId}`, {
     params: { startDate, endDate, page, limit: 100 },
   });
   return data;
 };
 
 export const fetchLiveDevices = async () => {
-  const { data } = await api.get<DeviceData[]>('/api/devices/live');
+  const { data } = await api.get<DeviceData[]>('/api/device-data/live');
   return data;
 };
 
@@ -35,11 +35,11 @@ export const createDevice = async (device: Partial<Device>) => {
   return data;
 };
 
-export const updateDevice = async (imei: string, device: Partial<Device>) => {
-  const { data } = await api.put<Device>(`/api/devices/${imei}`, device);
+export const updateDevice = async (id: string, device: Partial<Device>) => {
+  const { data } = await api.put<Device>(`/api/devices/${id}`, device);
   return data;
 };
 
-export const deleteDevice = async (imei: string) => {
-  await api.delete(`/api/devices/${imei}`);
+export const deleteDevice = async (id: string) => {
+  await api.delete(`/api/devices/${id}`);
 };

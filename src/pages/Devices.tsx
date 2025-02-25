@@ -90,13 +90,13 @@ export const Devices = () => {
                 <Typography sx={{ p: 2, color: theme.palette.text.secondary }}>{t('noDevices')}</Typography>
             ) : (
                 (data?.devices || []).map((device, index) => (
-                    <Box key={device.imei}>
+                    <Box key={device.id}>
                       <ListItem
                           secondaryAction={
                             <Button
                                 variant="text"
                                 color="error"
-                                onClick={() => deleteMutation.mutate(device.imei)}
+                                onClick={() => deleteMutation.mutate(device.id)}
                                 sx={{ transition: 'all 0.2s ease' }}
                             >
                               {t('delete')}
@@ -105,11 +105,11 @@ export const Devices = () => {
                           sx={{ '&:hover': { bgcolor: theme.palette.grey[100], transition: 'all 0.2s ease' } }}
                       >
                         <ListItemText
-                            primary={`${device.name} - ${device.imei}`}
+                            primary={`${device.name} - ${device.id} - ${device.imei}`}
                             secondary={device.notifications.some((n) => !n.read) ? t('unreadAlerts') : null}
                             primaryTypographyProps={{ fontWeight: 500, color: theme.palette.text.primary }}
                             secondaryTypographyProps={{ color: theme.palette.error.main }}
-                            onClick={() => navigate(`/devices/${device.imei}`)}
+                            onClick={() => navigate(`/devices/${device.id}`)}
                             sx={{ cursor: 'pointer' }}
                         />
                       </ListItem>

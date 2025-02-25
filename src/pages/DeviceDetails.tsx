@@ -22,7 +22,7 @@ import { useDeviceData } from '../hooks/useDeviceData';
 import { useTranslation } from 'react-i18next';
 
 export const DeviceDetails = () => {
-    const { imei } = useParams();
+    const { id } = useParams<{ id: string}>();
     const queryClient = useQueryClient();
     const [editOpen, setEditOpen] = useState(false);
     const [editDevice, setEditDevice] = useState({ name: '', code: '', description: '' });
@@ -30,15 +30,15 @@ export const DeviceDetails = () => {
     const theme = useTheme();
 
     const { data: device, isLoading: deviceLoading } = useQuery({
-        queryKey: ['device', imei],
-        queryFn: () => fetchDevice(imei!),
+        queryKey: ['device', id],
+        queryFn: () => fetchDevice(id!),
     });
-    const { data: history, isLoading: historyLoading } = useDeviceData(imei!);
+    const { data: history, isLoading: historyLoading } = useDeviceData(id!);
 
     const updateMutation = useMutation({
-        mutationFn: (data: Partial<Device>) => updateDevice(imei!, data),
+        mutationFn: (data: Partial<Device>) => updateDevice(id!, data),
         onSuccess: () => {
-            queryClient.invalidateQueries(['device', imei]);
+            queryClient.invalidateQueries(['device', id]);
             setEditOpen(false);
         },
     });
