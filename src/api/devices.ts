@@ -1,45 +1,29 @@
-import api from './axios';
-import { Device, DeviceData } from '../types/device';
+export const fetchDevices = async (searchParams: { name?: string; imei?: string; code?: string } = {}) => {
+  const params = new URLSearchParams(searchParams).toString();
+  const response = await fetch(`http://localhost:8080/devices?${params}`);
+  if (!response.ok) throw new Error('Failed to fetch devices');
+  return response.json();
+};
 
-export const fetchDevices = async ({ page = 1, search = '' }) => {
-  const { data } = await api.get<{ devices: Device[]; total: number }>('/api/devices', {
-    params: { page, search, limit: 50 },
+export const fetchDeviceDetails = async (id: string) => {
+  const response = await fetch(`http://localhost:8080/devices/${id}`);
+  if (!response.ok) throw new Error('Failed to fetch device details');
+  return response.json();
+};
+
+export const updateDevice = async (id: string, device: any) => {
+  const response = await fetch(`http://localhost:8080/devices/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(device),
   });
-
-  return data;
-
-};
-
-export const fetchDevice = async (id: string) => {
-  const { data } = await api.get<Device>(`/api/devices/${id}`);
-  return data;
-};
-
-export const fetchDeviceData = async (
-  deviceId: string,
-  { startDate, endDate, page = 1 }: { startDate?: string; endDate?: string; page?: number }
-) => {
-  const { data } = await api.get<{ data: DeviceData[]; total: number }>(`/api/device-data/${deviceId}`, {
-    params: { startDate, endDate, page, limit: 100 },
-  });
-  return data;
-};
-
-export const fetchLiveDevices = async () => {
-  const { data } = await api.get<DeviceData[]>('/api/device-data/live');
-  return data;
-};
-
-export const createDevice = async (device: Partial<Device>) => {
-  const { data } = await api.post<Device>('/api/devices', device);
-  return data;
-};
-
-export const updateDevice = async (id: string, device: Partial<Device>) => {
-  const { data } = await api.put<Device>(`/api/devices/${id}`, device);
-  return data;
+  if (!response.ok) throw new Error('Failed to update device');
+  return response.json();
 };
 
 export const deleteDevice = async (id: string) => {
-  await api.delete(`/api/devices/${id}`);
+  const response = await fetch(`http://localhost:8080/devices/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) throw new Error('Failed to delete device');
 };

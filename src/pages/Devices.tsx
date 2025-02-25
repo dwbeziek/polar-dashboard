@@ -1,187 +1,143 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  TextField,
-  CircularProgress,
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Typography,
-  useTheme,
+  Box, Button, IconButton, Menu, MenuItem, Modal, TextField, Typography, useTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from '@mui/material';
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchDevices, createDevice, deleteDevice } from '../api/devices';
-import { debounce } from '../utils/debounce';
 import { useTranslation } from 'react-i18next';
+import { fetchDevices, deleteDevice } from '../api/devices';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Link } from 'react-router-dom';
 
 export const Devices = () => {
-  const [search, setSearch] = useState('');
-  const [open, setOpen] = useState(false);
-  const [newDevice, setNewDevice] = useState({ imei: '', name: '', code: '', description: '' });
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const theme = useTheme();
+  const queryClient = useQueryClient();
+
+  const [searchParams, setSearchParams] = useState({ name: '', imei: '', code: '' });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedDevice, setSelectedDevice] = useState<any>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['devices', search],
-    queryFn: () => fetchDevices({ search }),
-  });
-
-  const createMutation = useMutation({
-    mutationFn: createDevice,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['devices']);
-      setOpen(false);
-    },
+    queryKey: ['devices', searchParams],
+    queryFn: () => fetchDevices(searchParams),
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteDevice,
-    onSuccess: () => queryClient.invalidateQueries(['devices']),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['devices'] });
+      setOpenDeleteModal(false);
+    },
   });
 
-  const debouncedSetSearch = useCallback(debounce((value: string) => setSearch(value), 300), []);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, device: any) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedDevice(device);
+  };
 
-  const handleCreate = () => createMutation.mutate(newDevice);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedDevice(null);
+  };
 
-  if (isLoading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
-  if (error) return <Typography color="error" sx={{ textAlign: 'center', mt: 4 }}>{t('error')}: {(error as Error).message}</Typography>;
+  const handleDelete = () => {
+    if (selectedDevice) deleteMutation.mutate(selectedDevice.id);
+  };
 
-  const totalCount = data?.total ?? data?.devices?.length ?? 0;
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+  };
+
+  if (isLoading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">Error: {(error as Error).message}</Typography>;
 
   return (
-      <Box>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('devices')}</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+          {t('devices')}
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           <TextField
-              label={t('search')}
-              value={search}
-              onChange={(e) => debouncedSetSearch(e.target.value)}
-              sx={{ width: '300px', transition: 'all 0.2s ease' }}
+              label={t('searchByName')}
+              name="name"
+              value={searchParams.name}
+              onChange={handleSearchChange}
               variant="outlined"
               size="small"
           />
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setOpen(true)}
-              sx={{ transition: 'all 0.2s ease' }}
-          >
-            {t('addDevice')}
-          </Button>
+          <TextField
+              label={t('searchByImei')}
+              name="imei"
+              value={searchParams.imei}
+              onChange={handleSearchChange}
+              variant="outlined"
+              size="small"
+          />
+          <TextField
+              label={t('searchByCode')}
+              name="code"
+              value={searchParams.code}
+              onChange={handleSearchChange}
+              variant="outlined"
+              size="small"
+          />
         </Box>
-        <Box
-            sx={{
-              bgcolor: theme.palette.background.paper,
-              border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-              borderRadius: 1,
-            }}
-        >
-          <List sx={{ maxHeight: '600px', overflow: 'auto' }}>
-            {totalCount === 0 ? (
-                <Typography sx={{ p: 2, color: theme.palette.text.secondary }}>{t('noDevices')}</Typography>
-            ) : (
-                (data?.devices || []).map((device, index) => (
-                    <Box key={device.id}>
-                      <ListItem
-                          secondaryAction={
-                            <Button
-                                variant="text"
-                                color="error"
-                                onClick={() => deleteMutation.mutate(device.id)}
-                                sx={{ transition: 'all 0.2s ease' }}
-                            >
-                              {t('delete')}
-                            </Button>
-                          }
-                          sx={{ '&:hover': { bgcolor: theme.palette.grey[100], transition: 'all 0.2s ease' } }}
-                      >
-                        <ListItemText
-                            primary={`${device.name} - ${device.id} - ${device.imei}`}
-                            secondary={device.notifications.some((n) => !n.read) ? t('unreadAlerts') : null}
-                            primaryTypographyProps={{ fontWeight: 500, color: theme.palette.text.primary }}
-                            secondaryTypographyProps={{ color: theme.palette.error.main }}
-                            onClick={() => navigate(`/devices/${device.id}`)}
-                            sx={{ cursor: 'pointer' }}
-                        />
-                      </ListItem>
-                      {index < totalCount - 1 && <Divider sx={{ bgcolor: theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d' }} />}
-                    </Box>
-                ))
-            )}
-          </List>
-        </Box>
-        <Dialog
-            open={open}
-            onClose={() => setOpen(false)}
-            sx={{
-              '& .MuiDialog-paper': {
-                borderRadius: 1,
-                bgcolor: theme.palette.background.paper,
-                border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-              },
-            }}
-        >
-          <DialogTitle sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{t('addDevice')}</DialogTitle>
-          <DialogContent>
-            <TextField
-                label="IMEI"
-                value={newDevice.imei}
-                onChange={(e) => setNewDevice({ ...newDevice, imei: e.target.value })}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                sx={{ transition: 'all 0.2s ease' }}
-            />
-            <TextField
-                label={t('name')}
-                value={newDevice.name}
-                onChange={(e) => setNewDevice({ ...newDevice, name: e.target.value })}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                sx={{ transition: 'all 0.2s ease' }}
-            />
-            <TextField
-                label={t('code')}
-                value={newDevice.code}
-                onChange={(e) => setNewDevice({ ...newDevice, code: e.target.value })}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                sx={{ transition: 'all 0.2s ease' }}
-            />
-            <TextField
-                label={t('description')}
-                value={newDevice.description}
-                onChange={(e) => setNewDevice({ ...newDevice, description: e.target.value })}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                sx={{ transition: 'all 0.2s ease' }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpen(false)} sx={{ color: theme.palette.text.secondary, transition: 'all 0.2s ease' }}>
-              {t('cancel')}
-            </Button>
-            <Button onClick={handleCreate} variant="contained" color="primary" sx={{ transition: 'all 0.2s ease' }}>
-              {t('create')}
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <TableContainer sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>{t('name')}</TableCell>
+                <TableCell>{t('imei')}</TableCell>
+                <TableCell>{t('code')}</TableCell>
+                <TableCell>{t('description')}</TableCell>
+                <TableCell>{t('actions')}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.devices.map((device: any) => (
+                  <TableRow key={device.id}>
+                    <TableCell>{device.name}</TableCell>
+                    <TableCell>{device.imei}</TableCell>
+                    <TableCell>{device.code}</TableCell>
+                    <TableCell>{device.description}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={(e) => handleMenuOpen(e, device)}>
+                        <MoreVertIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem component={Link} to={`/devices/${selectedDevice?.id}`} onClick={handleMenuClose}>
+            {t('viewData')}
+          </MenuItem>
+          <MenuItem component={Link} to={`/devices/${selectedDevice?.id}/edit`} onClick={handleMenuClose}>
+            {t('edit')}
+          </MenuItem>
+          <MenuItem onClick={() => setOpenDeleteModal(true)}>{t('delete')}</MenuItem>
+        </Menu>
+        <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
+          <Box sx={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            bgcolor: theme.palette.background.paper, p: 3, borderRadius: 1, border: `1px solid ${theme.palette.divider}`,
+            maxWidth: 400, width: '100%'
+          }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>{t('confirmDelete')}</Typography>
+            <Typography>{t('areYouSure', { name: selectedDevice?.name })}</Typography>
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <Button variant="contained" color="error" onClick={handleDelete}>
+                {t('delete')}
+              </Button>
+              <Button variant="outlined" onClick={() => setOpenDeleteModal(false)}>
+                {t('cancel')}
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
       </Box>
   );
 };
