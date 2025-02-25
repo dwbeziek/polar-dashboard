@@ -19,7 +19,7 @@ interface ChartComponentProps {
 export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'primary.main' }: ChartComponentProps) => {
     const { t } = useTranslation();
     const theme = useTheme();
-    const [period, setPeriod] = useState('1h');
+    const [period, setPeriod] = useState('24h'); // Changed from '1h' to '24h'
 
     const { data, isLoading } = useQuery({
         queryKey: ['deviceDataHistory', deviceId, period],
@@ -33,7 +33,7 @@ export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'p
     const backgroundColor = borderColor ? `${borderColor.replace('rgb', 'rgba').replace(')', ', 0.2)')}` : 'rgba(0, 0, 0, 0.2)';
 
     const chartData = {
-        labels: data?.results.map((_, i) => `${-(data.results.length - 1 - i) * 5}s`) || [],
+        labels: data?.results.map((_, i) => `${-(data.results.length - 1 - i) * 5}s`) || [], // Adjust for larger dataset?
         datasets: [{
             label: `${t(label)} (${unit})`,
             data: data?.results.map((d: any) =>
@@ -50,7 +50,7 @@ export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'p
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Time (seconds ago)' } } },
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Time (hours ago)' } } }, // Updated label
     };
 
     return (

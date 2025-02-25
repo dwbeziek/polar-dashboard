@@ -1,76 +1,51 @@
 import { useQuery } from '@tanstack/react-query';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { useEffect, useRef } from 'react';
-import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { fetchAllLatestDeviceData } from '../api/deviceData';
+import { Link } from 'react-router-dom';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZHdiZXppZWsiLCJhIjoiY2s4NjM2Z2lpMDB2MDNtcHJndnYyeHQ5dyJ9.hMUfwxksjvbLW-R8WkKxhA';
+// Custom icons
+const fridgeIcon = new L.Icon({ iconUrl: '❄️', iconSize: [25, 25] }); // Replace with real icon
+const shipIcon = new L.Icon({ iconUrl: '🚢', iconSize: [25, 25] }); // Replace with real icon
 
 export const DeviceMap = () => {
-    const mapContainer = useRef(null);
-    const map = useRef<mapboxgl.Map | null>(null);
     const { t } = useTranslation();
     const theme = useTheme();
 
     const { data, isLoading, error } = useQuery({
-        queryKey: ['liveDeviceData'],
-        queryFn: async () => {
-            const response = await fetch('http://localhost:8080/api/device-data/live');
-            if (!response.ok) throw new Error(`Failed to fetch live device data: ${response.status}`);
-            return response.json();
-        },
-        refetchInterval: 5000,
+        queryKey: ['allLatestDeviceData'],
+        queryFn: () => fetchAllLatestDeviceData(),
     });
 
-    useEffect(() => {
-        if (!map.current && mapContainer.current) {
-            map.current = new mapboxgl.Map({
-                container: mapContainer.current,
-                style: theme.palette.mode === 'light' ? 'mapbox://styles/mapbox/light-v11' : 'mapbox://styles/mapbox/dark-v11',
-                center: [20, -30],
-                zoom: 2,
-            });
-        }
-
-        if (data && map.current && data.results && data.results.length > 0) {
-            map.current.on('load', () => {
-                document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove());
-
-                data.results.forEach((deviceData: any) => {
-                    const tempSensor = deviceData.sensorData?.find((sensor: any) => sensor.sensorType === 'TEMPERATURE') || {};
-                    const temperature = tempSensor.value || 'N/A';
-                    new mapboxgl.Marker({ color: temperature > 8 ? '#d32f2f' : '#2e7d32' })
-                        .setLngLat([deviceData.longitude, deviceData.latitude])
-                        .setPopup(new mapboxgl.Popup().setText(`Device ${deviceData.deviceId} - Temp: ${temperature}°C`))
-                        .addTo(map.current!);
-                });
-
-                const bounds = new mapboxgl.LngLatBounds();
-                data.results.forEach((d: any) => bounds.extend([d.longitude, d.latitude]));
-                map.current.fitBounds(bounds, { padding: 50 });
-            });
-        }
-    }, [data, theme.palette.mode]);
-
-    if (isLoading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
+    if (isLoading) return <Typography>Loading...</Typography>;
     if (error) return <Typography color="error">Error: {(error as Error).message}</Typography>;
 
     return (
-        <Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('deviceMap')}</Typography>
-            <Box
-                sx={{
-                    bgcolor: theme.palette.background.paper,
-                    border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                    borderRadius: 1,
-                    height: 'calc(93.5vh - 100px)', // Full height minus header/footer
-                    width: '100%',
-                    transition: 'all 0.2s ease',
-                }}
-            >
-                <div ref={mapContainer} style={{ height: '100%', width: '100%' }} />
-            </Box>
+        <Box sx={{ p: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+                {t('deviceMap')}
+            </Typography>
+            <MapContainer center={[0, 0]} zoom={2} style={{ height: '500px', width: '100%' }}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                {data?.results.map((d: any) => (
+                    <Marker
+                        key={d.deviceId}
+                        position={[d.latitude || 0, d.longitude || 0]}
+                        icon={d.speed ? shipIcon : fridgeIcon} // Example logic—adjust as needed
+                    >
+                        <Popup>
+                            <Typography variant="h6">{d.deviceId}</Typography>
+                            <Typography>Temp: {d.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 'N/A'} °C</Typography>
+                            <Typography>Speed: {d.speed || 'N/A'} km/h</Typography>
+                            <Button component={Link} to={`/devices/${d.deviceId}`} variant="contained" size="small">
+                                {t('viewData')}
+                            </Button>
+                        </Popup>
+                    </Marker>
+                ))}
+            </MapContainer>
         </Box>
     );
 };

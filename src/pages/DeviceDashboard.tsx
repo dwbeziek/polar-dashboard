@@ -1,17 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, Grid, Typography, useTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { fetchLatestDeviceData, fetchDeviceDataHistory } from '../api/deviceData';
+import { fetchLatestDeviceData } from '../api/deviceData';
 import { fetchThresholdsByDevice } from '../api/thresholds';
 import { fetchNotificationsByDevice } from '../api/notifications';
 import { ChartComponent } from '../components/ChartComponent';
+import { useState } from 'react';
 
 export const DeviceDashboard = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const theme = useTheme();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const { data: latestData, isLoading: isLoadingLatest, error: errorLatest } = useQuery({
         queryKey: ['latestDeviceData', id],
@@ -35,6 +38,12 @@ export const DeviceDashboard = () => {
 
     const latest = latestData?.results[0] || {};
     const currentTemp = latest.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 'N/A';
+
+    const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     return (
         <Box sx={{ p: 3 }}>
@@ -98,7 +107,7 @@ export const DeviceDashboard = () => {
                 <Grid item xs={12} md={6}>
                     <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
                         <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
                                 {t('thresholds')} {isLoadingThresholds ? '(Loading...)' : ''}
                             </Typography>
                             {thresholds?.map((t: any) => (
@@ -108,18 +117,46 @@ export const DeviceDashboard = () => {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                {t('notifications')} {isLoadingNotifications ? '(Loading...)' : ''}
-                            </Typography>
-                            {notifications?.map((n: any) => (
-                                <Typography key={n.id}>{n.message} ({n.read ? 'Read' : 'Unread'})</Typography>
-                            )) || <Typography>N/A</Typography>}
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
-        </Box>
-    );
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider` }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
+                {t('notifications')} {isLoadingNotifications ? '(Loading...)' : ''}
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Message</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Timestamp</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {notifications?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n: any) => (
+                      <TableRow key={n.id}>
+                        <TableCell>{n.message}</TableCell>
+                        <TableCell sx={{ color: n.read ? 'text.secondary' : 'error.main' }}>
+                          {n.read ? 'Read' : 'Unread'}
+                        </TableCell>
+                        <TableCell>{new Date(n.timestamp).toLocaleString()}</TableCell>
+                      </TableRow>
+                    )) || <TableRow><TableCell colSpan={3}>N/A</TableCell></TableRow>}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={notifications?.length || 0}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 };
