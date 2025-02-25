@@ -8,11 +8,13 @@ import { Link } from 'react-router-dom';
 import AcUnitIcon from '@mui/icons-material/AcUnit'; // Fridge
 import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat'; // Ship
 import { useEffect, useMemo } from 'react';
+import ReactDOMServer from 'react-dom/server';
 
 // Custom flat icon generator
-const createIcon = (IconComponent: any, color: string) => {
+const createIcon = (IconComponent: React.ElementType, color: string) => {
+    const iconHtml = ReactDOMServer.renderToString(<IconComponent style={{ color, fontSize: '24px' }} />);
     return new L.DivIcon({
-        html: `<div style="color: ${color}; font-size: 24px; display: flex; align-items: center; justify-content: center;">${new IconComponent().type.render()}</div>`,
+        html: `<div style="display: flex; align-items: center; justify-content: center;">${iconHtml}</div>`,
         className: 'custom-icon',
         iconSize: [24, 24],
         iconAnchor: [12, 12],
