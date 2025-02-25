@@ -1,24 +1,29 @@
-import {useContext, useState} from 'react';
+import { useState } from 'react';
 import {
     AppBar,
+    Toolbar,
+    Typography,
     Box,
-    CssBaseline,
-    Divider,
     Drawer,
-    IconButton,
     List,
     ListItem,
     ListItemIcon,
     ListItemText,
-    Toolbar,
-    Typography,
+    Divider,
+    CssBaseline,
+    IconButton,
     useMediaQuery,
     useTheme,
+    Menu,
+    MenuItem,
+    Button,
 } from '@mui/material';
-import {Outlet, useLocation, useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../hooks/useAuth';
-import {ThemeContext} from '../contexts/ThemeContext';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../hooks/useAuth';
+import { useContext } from 'react';
+import { ThemeContext } from '../contexts/ThemeContext';
+import { Outlet } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -29,14 +34,26 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import {LanguageSelector} from "./LanguageSelector";
 
 const drawerWidthFull = 260;
 const drawerWidthMinimal = 64;
 
+const languages = [
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'es', name: 'Spanish', flag: '🇪🇸' },
+    { code: 'pt', name: 'Portuguese', flag: '🇵🇹' },
+    { code: 'fr', name: 'French', flag: '🇫🇷' },
+    { code: 'it', name: 'Italian', flag: '🇮🇹' },
+    { code: 'zh-TW', name: 'Mandarin Traditional', flag: '🇹🇼' },
+    { code: 'zh-CN', name: 'Mandarin Simplified', flag: '🇨🇳' },
+    { code: 'da', name: 'Danish', flag: '🇩🇰' },
+    { code: 'sv', name: 'Swedish', flag: '🇸🇪' },
+];
+
 export const DashboardLayout = () => {
     const [isMinimal, setIsMinimal] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
     const location = useLocation();
     const { t, i18n } = useTranslation();
@@ -72,6 +89,21 @@ export const DashboardLayout = () => {
         if (isMinimal && !isMobile) setIsMinimal(false);
         navigate('/');
     };
+
+    const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleLanguageMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLanguageChange = (langCode: string) => {
+        i18n.changeLanguage(langCode);
+        handleLanguageMenuClose();
+    };
+
+    const currentLang = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
     const drawerContent = (
         <Box
@@ -241,7 +273,36 @@ export const DashboardLayout = () => {
                             Cryolytix
                         </Typography>
                     </Box>
-                    <LanguageSelector />
+                    <Button
+                        onClick={handleLanguageMenuOpen}
+                        sx={{
+                            color: theme.palette.text.secondary,
+                            textTransform: 'none',
+                            mr: 1,
+                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
+                            borderRadius: 1,
+                            p: '6px 12px',
+                            height: 36,
+                        }}
+                    >
+                        {currentLang.flag} {currentLang.name}
+                    </Button>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleLanguageMenuClose}
+                        sx={{ '& .MuiPaper-root': { bgcolor: theme.palette.background.paper } }}
+                    >
+                        {languages.map((lang) => (
+                            <MenuItem
+                                key={lang.code}
+                                onClick={() => handleLanguageChange(lang.code)}
+                                sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}
+                            >
+                                {lang.flag} {lang.name}
+                            </MenuItem>
+                        ))}
+                    </Menu>
                     <IconButton
                         onClick={toggleTheme}
                         sx={{
