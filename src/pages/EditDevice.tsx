@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { fetchDeviceDetails, updateDevice } from '../api/devices'; // Correct for device details
+// No fetchDeviceData here unless you added it
 
 export const EditDevice = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,9 +23,7 @@ export const EditDevice = () => {
     useEffect(() => {
         const fetchDevice = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/devices/${id}`);
-                if (!response.ok) throw new Error('Failed to fetch device');
-                const data = await response.json();
+                const data = await fetchDeviceDetails(id!);
                 setDevice(data);
             } catch (err) {
                 setError((err as Error).message);
@@ -41,13 +41,8 @@ export const EditDevice = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8080/api/devices/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(device),
-            });
-            if (!response.ok) throw new Error('Failed to update device');
-            navigate('/devices'); // Redirect to devices list
+            await updateDevice(id!, device);
+            navigate('/devices');
         } catch (err) {
             setError((err as Error).message);
         }

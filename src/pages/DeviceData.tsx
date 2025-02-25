@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { fetchDeviceData } from '../api/deviceData';
+import { fetchDeviceData } from '../api/deviceData'; // Correct import
 
 export const DeviceData = () => {
     const { id } = useParams<{ id: string }>();

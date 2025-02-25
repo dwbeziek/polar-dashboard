@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, useTheme } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { fetchDeviceData } from '../api/devices';
+import { fetchDeviceData } from '../api/deviceData';
 import Papa from 'papaparse';
 import { useTranslation } from 'react-i18next';
 
