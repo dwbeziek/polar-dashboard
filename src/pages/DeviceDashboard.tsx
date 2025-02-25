@@ -5,11 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { fetchLatestDeviceData } from '../api/deviceData';
 import { fetchThresholdsByDevice } from '../api/thresholds';
 import { fetchNotificationsByDevice } from '../api/notifications';
+import { fetchDeviceDetails } from '../api/devices'; // Assuming this exists
 import { ChartComponent } from '../components/ChartComponent';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn'; // Location
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'; // Movement
-import WarningIcon from '@mui/icons-material/Warning'; // Thresholds
+import ThermostatIcon from '@mui/icons-material/Thermostat'; // Temp Threshold
+import SpeedIcon from '@mui/icons-material/Speed'; // Speed Threshold
+import WarningIcon from '@mui/icons-material/Warning'; // Default Threshold
+import InfoIcon from '@mui/icons-material/Info'; // Device Info
 
 export const DeviceDashboard = () => {
     const { id } = useParams<{ id: string }>();
@@ -18,6 +22,7 @@ export const DeviceDashboard = () => {
     const theme = useTheme();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [currentThresholdIndex, setCurrentThresholdIndex] = useState(0);
 
     const { data: latestData, isLoading: isLoadingLatest, error: errorLatest } = useQuery({
         queryKey: ['latestDeviceData', id],
@@ -36,17 +41,38 @@ export const DeviceDashboard = () => {
         queryFn: () => fetchNotificationsByDevice(id!),
     });
 
-    if (isLoadingLatest) return <Typography>Loading...</Typography>;
+    const { data: deviceDetails, isLoading: isLoadingDevice } = useQuery({
+        queryKey: ['deviceDetails', id],
+        queryFn: () => fetchDeviceDetails(id!),
+    });
+
+    useEffect(() => {
+        if (thresholds && thresholds.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentThresholdIndex((prev) => (prev + 1) % thresholds.length);
+            }, 3000); // Cycle every 3 seconds
+            return () => clearInterval(interval);
+        }
+    }, [thresholds]);
+
+    if (isLoadingLatest || isLoadingDevice) return <Typography>Loading...</Typography>;
     if (errorLatest) return <Typography color="error">Error: {(errorLatest as Error).message}</Typography>;
 
     console.log('Latest Data:', latestData); // Debug log
     const latest = latestData?.results[0] || {};
-    const currentTemp = latest.sensorData?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 'N/A';
 
     const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const getThresholdIcon = (sensorType: string) => {
+        switch (sensorType.toLowerCase()) {
+            case 'temperature': return <ThermostatIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
+            case 'speed': return <SpeedIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
+            default: return <WarningIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />;
+        }
     };
 
     return (
@@ -60,32 +86,30 @@ export const DeviceDashboard = () => {
                 </Button>
             </Box>
             <Grid container spacing={2}>
-                {/* Full-width Temperature Chart */}
-                <Grid item xs={12}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
-                        <CardContent>
-                            <ChartComponent deviceId={id!} dataKey="temperature" label="temperature" unit="°C" color="error.main" />
+                {/* Top Row: Device Info, Location, Movement, Thresholds */}
+                <Grid item xs={12} sm={3}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
+                        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <InfoIcon sx={{ color: theme.palette.info.main, fontSize: 32 }} />
+                            <Box>
+                                <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
+                                    Device Info
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
+                                    {t('name')}: {deviceDetails?.name || 'N/A'}
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
+                                    {t('code')}: {deviceDetails?.code || 'N/A'}
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
+                                    {t('description')}: {deviceDetails?.description || 'N/A'}
+                                </Typography>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Grid>
-                {/* Speed and Altitude Charts */}
-                <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
-                        <CardContent>
-                            <ChartComponent deviceId={id!} dataKey="speed" label="speed" unit="km/h" color="primary.main" />
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
-                        <CardContent>
-                            <ChartComponent deviceId={id!} dataKey="altitude" label="altitude" unit="m" color="secondary.main" />
-                        </CardContent>
-                    </Card>
-                </Grid>
-                {/* Location Card */}
-                <Grid item xs={12} md={4}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2 }}>
+                <Grid item xs={12} sm={3}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
                         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <LocationOnIcon sx={{ color: theme.palette.primary.main, fontSize: 32 }} />
                             <Box>
@@ -105,9 +129,8 @@ export const DeviceDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                {/* Movement Card */}
-                <Grid item xs={12} md={4}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2 }}>
+                <Grid item xs={12} sm={3}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
                         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <DirectionsRunIcon sx={{ color: theme.palette.secondary.main, fontSize: 32 }} />
                             <Box>
@@ -127,21 +150,44 @@ export const DeviceDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                {/* Thresholds Card */}
-                <Grid item xs={12} md={4}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2 }}>
-                        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <WarningIcon sx={{ color: theme.palette.warning.main, fontSize: 32 }} />
-                            <Box>
-                                <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem', mb: 1 }}>
-                                    {t('thresholds')} {isLoadingThresholds ? '(Loading...)' : ''}
-                                </Typography>
-                                {thresholds?.map((t: any) => (
-                                    <Typography key={t.id} sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
-                                        {t.sensorType}: {t.minValue} - {t.maxValue}
+                <Grid item xs={12} sm={3}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, p: 2, height: '150px' }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem', mb: 1 }}>
+                                {t('thresholds')} {isLoadingThresholds ? '(Loading...)' : ''}
+                            </Typography>
+                            {thresholds && thresholds.length > 0 ? (
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, height: '100px', justifyContent: 'center' }}>
+                                    {getThresholdIcon(thresholds[currentThresholdIndex].sensorType)}
+                                    <Typography sx={{ color: theme.palette.text.primary, fontWeight: 500 }}>
+                                        {t(thresholds[currentThresholdIndex].sensorType.toLowerCase())}: {thresholds[currentThresholdIndex].minValue} - {thresholds[currentThresholdIndex].maxValue}
                                     </Typography>
-                                )) || <Typography sx={{ color: theme.palette.text.secondary }}>N/A</Typography>}
-                            </Box>
+                                </Box>
+                            ) : (
+                                <Typography sx={{ color: theme.palette.text.secondary }}>N/A</Typography>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Grid>
+                {/* Charts */}
+                <Grid item xs={12}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
+                        <CardContent>
+                            <ChartComponent deviceId={id!} dataKey="temperature" label="temperature" unit="°C" color="error.main" icon={<ThermostatIcon />} />
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
+                        <CardContent>
+                            <ChartComponent deviceId={id!} dataKey="speed" label="speed" unit="km/h" color="primary.main" icon={<SpeedIcon />} />
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
+                        <CardContent>
+                            <ChartComponent deviceId={id!} dataKey="altitude" label="altitude" unit="m" color="secondary.main" icon={<LocationOnIcon />} />
                         </CardContent>
                     </Card>
                 </Grid>

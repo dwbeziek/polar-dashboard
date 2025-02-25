@@ -55,5 +55,10 @@
   "satellites": "Satellites",
   "sensors": "Sensors",
   "temperature": "Temperature",
-  "edit": "Edit"
+  "edit": "Edit",
+  "time": "Time",
+  "lineChart": "Line Chart",
+  "barChart": "Bar Chart",
+  "hoursAgo": "hours ago",
+  "humidity": "Humidity"
 }
