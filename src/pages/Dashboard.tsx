@@ -1,70 +1,79 @@
 import { useQuery } from '@tanstack/react-query';
-import { Typography, Box, CircularProgress, Grid, Card, CardContent, useTheme } from '@mui/material';
-import { fetchDevices } from '../api/devices';
+import { Box, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { fetchDevices } from '../api/devices';
+import { fetchAllLatestDeviceData } from '../api/deviceData'; // Optional for temp
+import { fetchNotificationsByDevice } from '../api/notifications'; // New import
 
 export const Dashboard = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['devices'],
-        queryFn: () => fetchDevices({}),
-    });
     const { t } = useTranslation();
     const theme = useTheme();
 
-    if (isLoading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
-    if (error) return <Typography color="error" sx={{ textAlign: 'center', mt: 4 }}>{t('error')}: {(error as Error).message}</Typography>;
+    const { data: devicesData, isLoading: isLoadingDevices, error: errorDevices } = useQuery({
+        queryKey: ['devices'],
+        queryFn: () => fetchDevices(),
+    });
 
-    const totalDevices = data?.total ?? data?.devices?.length ?? 0;
-    const alerts = data?.devices?.reduce((sum, d) => sum + d.notifications.filter((n) => !n.read).length, 0) || 0;
-    const avgTemp =
-        data?.devices
-            ?.map((d) => d.latest?.sensorData.find((s) => s.sensorType === 'TEMPERATURE')?.value || 0)
-            .reduce((sum, val) => sum + val, 0) / (data?.devices?.length || 1) || 0;
+    const { data: notificationsData, isLoading: isLoadingNotifications } = useQuery({
+        queryKey: ['notifications'],
+        queryFn: async () => {
+            const devices = devicesData?.devices || [];
+            const promises = devices.map((d: any) => fetchNotificationsByDevice(String(d.id)));
+            const results = await Promise.all(promises);
+            return results.flat(); // Flatten all notifications
+        },
+        enabled: !!devicesData, // Wait for devices to load
+    });
+
+    const { data: latestData, isLoading: isLoadingLatest } = useQuery({
+        queryKey: ['allLatestDeviceData'],
+        queryFn: () => fetchAllLatestDeviceData(),
+    });
+
+    if (isLoadingDevices || isLoadingNotifications || isLoadingLatest) return <Typography>Loading...</Typography>;
+    if (errorDevices) return <Typography color="error">Error: {(errorDevices as Error).message}</Typography>;
+
+    const totalDevices = devicesData?.devices.length || 0;
+    const activeAlerts = notificationsData?.filter((n: any) => !n.read).length || 0;
+    const avgTemperature = latestData?.results
+        .map((d: any) => d.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 0)
+        .reduce((sum: number, val: number) => sum + val, 0) / (latestData?.results.length || 1) || 0;
 
     return (
-        <Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>{t('dashboard')}</Typography>
+        <Box sx={{ p: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+                {t('dashboard')}
+            </Typography>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card
-                        sx={{
-                            bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            transition: 'all 0.2s ease',
-                        }}
-                    >
-                        <CardContent sx={{ p: 2 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('totalDevices')}</Typography>
-                            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{totalDevices}</Typography>
+                <Grid item xs={12} md={4}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                {t('totalDevices')}
+                            </Typography>
+                            <Typography>{totalDevices}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card
-                        sx={{
-                            bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            transition: 'all 0.2s ease',
-                        }}
-                    >
-                        <CardContent sx={{ p: 2 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('activeAlerts')}</Typography>
-                            <Typography variant="h4" sx={{ fontWeight: 600, color: alerts > 0 ? theme.palette.error.main : theme.palette.success.main }}>{alerts}</Typography>
+                <Grid item xs={12} md={4}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                {t('activeAlerts')}
+                            </Typography>
+                            <Typography>{activeAlerts}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card
-                        sx={{
-                            bgcolor: theme.palette.background.paper,
-                            border: `1px solid ${theme.palette.mode === 'light' ? '#e5e7eb' : '#30363d'}`,
-                            transition: 'all 0.2s ease',
-                        }}
-                    >
-                        <CardContent sx={{ p: 2 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{t('avgTemperature')}</Typography>
-                            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{avgTemp.toFixed(1)}°C</Typography>
+                <Grid item xs={12} md={4}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                {t('avgTemperature')}
+                            </Typography>
+                            <Typography>{avgTemperature.toFixed(2)} °C</Typography>
                         </CardContent>
+
                     </Card>
                 </Grid>
             </Grid>

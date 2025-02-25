@@ -117,46 +117,46 @@ export const DeviceDashboard = () => {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider` }}>
-            <CardContent>
-              <Typography variant="h6" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
-                {t('notifications')} {isLoadingNotifications ? '(Loading...)' : ''}
-              </Typography>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Message</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Timestamp</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {notifications?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n: any) => (
-                      <TableRow key={n.id}>
-                        <TableCell>{n.message}</TableCell>
-                        <TableCell sx={{ color: n.read ? 'text.secondary' : 'error.main' }}>
-                          {n.read ? 'Read' : 'Unread'}
-                        </TableCell>
-                        <TableCell>{new Date(n.timestamp).toLocaleString()}</TableCell>
-                      </TableRow>
-                    )) || <TableRow><TableCell colSpan={3}>N/A</TableCell></TableRow>}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={notifications?.length || 0}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}` }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
+                                {t('notifications')} {isLoadingNotifications ? '(Loading...)' : ''}
+                            </Typography>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Message</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>Timestamp</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {notifications?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n: any) => (
+                                            <TableRow key={n.id}>
+                                                <TableCell>{n.message}</TableCell>
+                                                <TableCell sx={{ color: n.read ? 'text.secondary' : 'error.main' }}>
+                                                    {n.read ? 'Read' : 'Unread'}
+                                                </TableCell>
+                                                <TableCell>{new Date(n.timestamp).toLocaleString()}</TableCell>
+                                            </TableRow>
+                                        )) || <TableRow><TableCell colSpan={3}>N/A</TableCell></TableRow>}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                component="div"
+                                count={notifications?.length || 0}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+        </Box>
+    );
 };
