@@ -19,7 +19,7 @@ interface ChartComponentProps {
 export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'primary.main' }: ChartComponentProps) => {
     const { t } = useTranslation();
     const theme = useTheme();
-    const [period, setPeriod] = useState('24h'); // Changed from '1h' to '24h'
+    const [period, setPeriod] = useState('24h'); // Default to 24h per your request
 
     const { data, isLoading } = useQuery({
         queryKey: ['deviceDataHistory', deviceId, period],
@@ -38,7 +38,7 @@ export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'p
             label: `${t(label)} (${unit})`,
             data: data?.results.map((d: any) =>
                 dataKey === 'temperature' ?
-                    d.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 0 :
+                    d.sensorData?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 0 :
                     d[dataKey] || 0
             ) || [],
             borderColor,
@@ -50,7 +50,7 @@ export const ChartComponent = ({ deviceId, dataKey, label, unit = '', color = 'p
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Time (hours ago)' } } }, // Updated label
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Time (hours ago)' } } },
     };
 
     return (

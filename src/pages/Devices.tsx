@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Box, Button, IconButton, Menu, MenuItem, Modal, TextField, Typography, useTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+  Box, Button, IconButton, Menu, MenuItem, Modal, TextField, Typography, useTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { fetchDevices, deleteDevice } from '../api/devices';
@@ -100,6 +100,7 @@ export const Devices = () => {
                 <TableCell>{t('imei')}</TableCell>
                 <TableCell>{t('code')}</TableCell>
                 <TableCell>{t('description')}</TableCell>
+                <TableCell>Status</TableCell> {/* New column */}
                 <TableCell>{t('actions')}</TableCell>
               </TableRow>
             </TableHead>
@@ -110,6 +111,20 @@ export const Devices = () => {
                     <TableCell>{device.imei}</TableCell>
                     <TableCell>{device.code}</TableCell>
                     <TableCell>{device.description}</TableCell>
+                    <TableCell>
+                      <Badge
+                          badgeContent="Active" // Placeholder—replace with real status logic if available
+                          color="success"
+                          sx={{
+                            '& .MuiBadge-badge': {
+                              borderRadius: '12px',
+                              padding: '2px 8px',
+                              fontSize: '0.75rem',
+                              fontWeight: 500,
+                            },
+                          }}
+                      />
+                    </TableCell>
                     <TableCell>
                       <IconButton onClick={(e) => handleMenuOpen(e, device)}>
                         <MoreVertIcon />
