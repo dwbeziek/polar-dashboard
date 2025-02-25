@@ -19,7 +19,10 @@ export const DeviceDashboard = () => {
     });
 
     if (isLoading) return <Typography>Loading...</Typography>;
-    if (error) return <Typography color="error">Error: {(error as Error).message}</Typography>;
+    if (error) {
+        console.error('Fetch error:', error); // Log error for debugging
+        return <Typography color="error">Error: {(error as Error).message}</Typography>;
+    }
 
     const latestData = data?.results[0] || {};
     const currentTemp = latestData.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 'N/A';

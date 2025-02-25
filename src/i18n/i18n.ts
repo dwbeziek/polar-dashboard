@@ -12,7 +12,7 @@ i18n
       en: { translation: en },
       es: { translation: es },
       fr: { translation: fr },
-      zhCH: { translation: zhCH },
+      'zh-CH': { translation: zhCH },
     },
     lng: 'en', // Default language
     fallbackLng: 'en', // Fallback if translation is missing
