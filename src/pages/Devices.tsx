@@ -32,6 +32,10 @@ export const Devices = () => {
   });
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, device: any) => {
+    if (!device || !device.id) {
+      console.error('Invalid device selected:', device);
+      return;
+    }
     setAnchorEl(event.currentTarget);
     setSelectedDevice(device);
   };
@@ -42,7 +46,7 @@ export const Devices = () => {
   };
 
   const handleDelete = () => {
-    if (selectedDevice) deleteMutation.mutate(selectedDevice.id);
+    if (selectedDevice) deleteMutation.mutate(String(selectedDevice.id));
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,9 +58,14 @@ export const Devices = () => {
 
   return (
       <Box sx={{ p: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
-          {t('devices')}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+            {t('devices')}
+          </Typography>
+          <Button variant="contained" color="primary" component={Link} to="/devices/create">
+            {t('createDevice')}
+          </Button>
+        </Box>
         <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           <TextField
               label={t('searchByName')}

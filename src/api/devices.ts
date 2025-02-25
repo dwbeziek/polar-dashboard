@@ -11,6 +11,18 @@ export const fetchDeviceDetails = async (id: string) => {
   return response.json();
 };
 
+export const createDevice = async (device: any) => {
+  const response = await fetch(`http://localhost:8080/api/devices`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(device),
+  });
+  if (!response.ok) throw new Error('Failed to create device');
+  return response.json();
+};
+
+// ... rest unchanged ...
+
 export const updateDevice = async (id: string, device: any) => {
   const response = await fetch(`http://localhost:8080/api/devices/${id}`, {
     method: 'PUT',
