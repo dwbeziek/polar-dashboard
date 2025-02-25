@@ -8,6 +8,8 @@ import { DeviceDetails } from '../pages/DeviceDetails';
 import { DeviceMap } from '../pages/DeviceMap';
 import { Reports } from '../pages/Reports';
 import { Settings } from '../pages/Settings';
+import {DeviceData} from "../pages/DeviceData";
+import {EditDevice} from "../pages/EditDevice";
 
 export const routes: RouteObject[] = [
   { path: '/login', element: <Login /> },
@@ -20,7 +22,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: '/', element: <Dashboard /> },
       { path: '/devices', element: <Devices /> },
-      { path: '/devices/:imei', element: <DeviceDetails /> },
+      { path: '/devices/:id', element: <DeviceData /> },
+      { path: '/devices/:id/edit', element: <EditDevice /> },
       { path: '/device-map', element: <DeviceMap /> },
       { path: '/reports', element: <Reports /> },
       { path: '/settings', element: <Settings /> },
