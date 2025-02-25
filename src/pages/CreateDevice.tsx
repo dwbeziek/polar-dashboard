@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
-import { useTranslation } from 'react-i18n';
+import { useTranslation } from 'react-i18next'; // Fixed typo from 'react-i18n'
 import { createDevice } from '../api/devices';
 
 export const CreateDevice = () => {

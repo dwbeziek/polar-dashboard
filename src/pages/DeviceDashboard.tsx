@@ -2,12 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { fetchLatestDeviceData } from '../api/deviceData';
+import { fetchLatestDeviceData } from '../api/deviceData'; // Fixed import
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useState, useEffect } from 'react';
 
-// Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const DeviceDashboard = () => {
@@ -20,13 +19,13 @@ export const DeviceDashboard = () => {
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['latestDeviceData', id],
-        queryFn: () => fetchLatestDeviceData(id!),
-        refetchInterval: 5000, // Poll every 5 seconds
+        queryFn: () => fetchLatestDeviceData(id!), // Fixed function name
+        refetchInterval: 5000,
     });
 
     useEffect(() => {
         if (data?.results[0]) {
-            setSensorHistory(prev => [...prev.slice(-19), data.results[0]].slice(-20)); // Keep last 20 data points
+            setSensorHistory(prev => [...prev.slice(-19), data.results[0]].slice(-20));
         }
     }, [data]);
 
@@ -36,7 +35,7 @@ export const DeviceDashboard = () => {
     const latestData = data?.results[0] || {};
 
     const chartData = (key: string) => ({
-        labels: sensorHistory.map((_, i) => i.toString()),
+        labels: sensorHistory.map((_, i) => `${-(sensorHistory.length - 1 - i) * 5}s`),
         datasets: [{
             label: t(key),
             data: sensorHistory.map(d => d[key] || 0),
@@ -49,7 +48,7 @@ export const DeviceDashboard = () => {
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true } },
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Time (seconds ago)' } } },
     };
 
     return (
@@ -69,9 +68,9 @@ export const DeviceDashboard = () => {
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 {t('location')}
                             </Typography>
-                            <Typography>lat: {latestData.latitude || 'N/A'}</Typography>
-                            <Typography>lon: {latestData.longitude || 'N/A'}</Typography>
-                            <Typography>alt: {latestData.altitude || 'N/A'} m</Typography>
+                            <Typography>{t('lat')}: {latestData.latitude || 'N/A'}</Typography>
+                            <Typography>{t('lon')}: {latestData.longitude || 'N/A'}</Typography>
+                            <Typography>{t('alt')}: {latestData.altitude || 'N/A'} m</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -81,9 +80,9 @@ export const DeviceDashboard = () => {
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 {t('movement')}
                             </Typography>
-                            <Typography>speed: {latestData.speed || 'N/A'} km/h</Typography>
-                            <Typography>angle: {latestData.angle || 'N/A'}°</Typography>
-                            <Typography>satellites: {latestData.satellites || 'N/A'}</Typography>
+                            <Typography>{t('speed')}: {latestData.speed || 'N/A'} km/h</Typography>
+                            <Typography>{t('angle')}: {latestData.angle || 'N/A'}°</Typography>
+                            <Typography>{t('satellites')}: {latestData.satellites || 'N/A'}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -118,6 +117,37 @@ export const DeviceDashboard = () => {
                                 {t('altitude')}
                             </Typography>
                             <Line data={chartData('altitude')} options={chartOptions} />
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, height: 300 }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                {t('angle')}
+                            </Typography>
+                            <Line data={chartData('angle')} options={chartOptions} />
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, height: 300 }}>
+                        <CardContent>
+                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                {t('temperature')}
+                            </Typography>
+                            <Line data={{
+                                labels: sensorHistory.map((_, i) => `${-(sensorHistory.length - 1 - i) * 5}s`),
+                                datasets: [{
+                                    label: t('temperature'),
+                                    data: sensorHistory.map(d =>
+                                        d.sensorDataEntityList?.find((s: any) => s.sensorType === 'TEMPERATURE')?.value || 0
+                                    ),
+                                    borderColor: theme.palette.secondary.main,
+                                    backgroundColor: theme.palette.secondary.light,
+                                    fill: false,
+                                }],
+                            }} options={chartOptions} />
                         </CardContent>
                     </Card>
                 </Grid>

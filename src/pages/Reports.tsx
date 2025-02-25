@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, useTheme } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { fetchDeviceData } from '../api/deviceData';
+import { fetchLatestDeviceData } from '../api/deviceData';
 import Papa from 'papaparse';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +13,7 @@ export const Reports = () => {
     const theme = useTheme();
     const { data, refetch, isLoading } = useQuery({
         queryKey: ['report', imei, startDate, endDate],
-        queryFn: () => fetchDeviceData(imei, { startDate, endDate }),
+        queryFn: () => fetchLatestDeviceData(imei, { startDate, endDate }),
         enabled: false,
     });
 

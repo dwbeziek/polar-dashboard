@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchDeviceData } from '../api/devices';
+import { fetchLatestDeviceData } from '../api/deviceData';
 
 export const useDeviceData = (
     deviceId: string,
@@ -7,6 +7,6 @@ export const useDeviceData = (
 ) => {
   return useQuery({
     queryKey: ['deviceData', deviceId, options.startDate, options.endDate, options.page],
-    queryFn: () => fetchDeviceData(deviceId, options),
+    queryFn: () => fetchLatestDeviceData(deviceId, options),
   });
 };
