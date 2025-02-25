@@ -11,7 +11,7 @@ export const Settings = () => {
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
                 {t('settings')}
             </Typography>
-            {/* Placeholder for future settings */}
+            {/* Empty as requested */}
         </Box>
     );
 };
