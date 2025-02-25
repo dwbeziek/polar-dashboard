@@ -5,7 +5,6 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { fetchDevices, deleteDevice } from '../api/devices';
-import { fetchLatestDeviceData } from '../api/deviceData';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ export const Devices = () => {
   const [selectedDevice, setSelectedDevice] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const { data: devicesData, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['devices', searchParams],
     queryFn: () => fetchDevices(searchParams),
   });
@@ -101,20 +100,16 @@ export const Devices = () => {
                 <TableCell>{t('imei')}</TableCell>
                 <TableCell>{t('code')}</TableCell>
                 <TableCell>{t('description')}</TableCell>
-                <TableCell>Status</TableCell>
                 <TableCell>{t('actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {devicesData?.devices.map((device: any) => (
+              {data?.devices.map((device: any) => (
                   <TableRow key={device.id}>
                     <TableCell>{device.name}</TableCell>
                     <TableCell>{device.imei}</TableCell>
                     <TableCell>{device.code}</TableCell>
                     <TableCell>{device.description}</TableCell>
-                    <TableCell>
-                      <DeviceStatus deviceId={String(device.id)} />
-                    </TableCell>
                     <TableCell>
                       <IconButton onClick={(e) => handleMenuOpen(e, device)}>
                         <MoreVertIcon />
@@ -152,29 +147,6 @@ export const Devices = () => {
             </Box>
           </Box>
         </Modal>
-      </Box>
-  );
-};
-
-// New Status Component
-const DeviceStatus = ({ deviceId }: { deviceId: string }) => {
-  const { data } = useQuery({
-    queryKey: ['latestDeviceData', deviceId],
-    queryFn: () => fetchLatestDeviceData(deviceId),
-  });
-  const hasData = data?.results && data.results.length > 0;
-  return (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Box
-            sx={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              bgcolor: hasData ? 'success.main' : 'warning.main',
-              mr: 1,
-            }}
-        />
-        <Typography>{hasData ? 'Active' : 'No Data'}</Typography>
       </Box>
   );
 };
