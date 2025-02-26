@@ -14,13 +14,14 @@ export const Devices = () => {
   const queryClient = useQueryClient();
 
   const [searchParams, setSearchParams] = useState({ name: '', imei: '', code: '' });
+  const [searchTrigger, setSearchTrigger] = useState({ name: '', imei: '', code: '' }); // Triggered search values
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedDevice, setSelectedDevice] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['devices', searchParams],
-    queryFn: () => fetchDevices(searchParams),
+    queryKey: ['devices', searchTrigger.name, searchTrigger.imei, searchTrigger.code],
+    queryFn: () => fetchDevices(searchTrigger.name, searchTrigger.imei, searchTrigger.code),
   });
 
   const deleteMutation = useMutation({
@@ -53,6 +54,10 @@ export const Devices = () => {
     setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
   };
 
+  const handleSearchSubmit = () => {
+    setSearchTrigger(searchParams); // Trigger search with current params
+  };
+
   if (isLoading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">Error: {(error as Error).message}</Typography>;
 
@@ -66,7 +71,7 @@ export const Devices = () => {
             {t('createDevice')}
           </Button>
         </Box>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
           <TextField
               label={t('searchByName')}
               name="name"
@@ -91,6 +96,9 @@ export const Devices = () => {
               variant="outlined"
               size="small"
           />
+          <Button variant="contained" color="primary" onClick={handleSearchSubmit}>
+            {t('search')}
+          </Button>
         </Box>
         <TableContainer sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}>
           <Table>

@@ -1,6 +1,9 @@
-export const fetchDevices = async (searchParams: { name?: string; imei?: string; code?: string } = {}) => {
-  const params = new URLSearchParams(searchParams).toString();
-  const response = await fetch(`http://localhost:8080/api/devices?${params}`);
+export const fetchDevices = async (name: string = '', imei: string = '', code: string = '') => {
+  const params = new URLSearchParams();
+  if (name) params.append('name', name);
+  if (imei) params.append('imei', imei);
+  if (code) params.append('code', code);
+  const response = await fetch(`http://localhost:8080/api/devices?${params.toString()}`);
   if (!response.ok) throw new Error('Failed to fetch devices');
   return response.json(); // Returns DeviceResponse { devices: Device[] }
 };
