@@ -100,39 +100,11 @@ export const Devices = () => {
                 <TableCell>{t('imei')}</TableCell>
                 <TableCell>{t('code')}</TableCell>
                 <TableCell>{t('description')}</TableCell>
-                <TableCell>Status</TableCell> {/* New column */}
+                <TableCell>Status</TableCell>
                 <TableCell>{t('actions')}</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {data?.devices.map((device: any) => (
-                  <TableRow key={device.id}>
-                    <TableCell>{device.name}</TableCell>
-                    <TableCell>{device.imei}</TableCell>
-                    <TableCell>{device.code}</TableCell>
-                    <TableCell>{device.description}</TableCell>
-                    <TableCell>
-                      <Badge
-                          badgeContent="Active" // Placeholder—replace with real status logic if available
-                          color="success"
-                          sx={{
-                            '& .MuiBadge-badge': {
-                              borderRadius: '12px',
-                              padding: '2px 8px',
-                              fontSize: '0.75rem',
-                              fontWeight: 500,
-                            },
-                          }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton onClick={(e) => handleMenuOpen(e, device)}>
-                        <MoreVertIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-              ))}
-            </TableBody>
+            <TableBody>{data?.devices.map((device: any) => (<TableRow key={device.id}><TableCell>{device.name}</TableCell><TableCell>{device.imei}</TableCell><TableCell>{device.code}</TableCell><TableCell>{device.description}</TableCell><TableCell><Badge badgeContent="Active" color="success" sx={{ '& .MuiBadge-badge': { borderRadius: '12px', padding: '2px 8px', fontSize: '0.75rem', fontWeight: 500 } }} /></TableCell><TableCell><IconButton onClick={(e) => handleMenuOpen(e, device)}><MoreVertIcon /></IconButton></TableCell></TableRow>))}</TableBody>
           </Table>
         </TableContainer>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
