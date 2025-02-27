@@ -29,11 +29,11 @@ export const DeviceDashboardNew = () => {
                 </CardContent>
             </Card>
 
-            {/* Main Grid: 3 columns, 4 rows */}
-            <Grid container spacing={2}>
-                {/* Card 1: Location (2 columns, 2 rows) */}
-                <Grid item xs={12} md={8} sx={{ order: { xs: 1, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, minHeight: { xs: 200, md: 400 } }}>
+            {/* Main Grid: 12 columns, 12 rows */}
+            <Grid container spacing={2} sx={{ height: 'calc(100vh - 200px)' }}> {/* Adjust height for 12 rows */}
+                {/* Card 1: Location (9 columns, 6 rows) */}
+                <Grid item xs={12} md={9} sx={{ order: { xs: 1, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '50%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 1: Location
@@ -43,9 +43,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 2: Notifications (1 column, 4 rows, last on mobile) */}
-                <Grid item xs={12} md={4} sx={{ order: { xs: 8, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, minHeight: { xs: 200, md: 820 } }}>
+                {/* Card 2: Notifications (3 columns, 12 rows, last on mobile) */}
+                <Grid item xs={12} md={3} sx={{ order: { xs: 8, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '100%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 2: Notifications
@@ -55,9 +55,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.1: Temperature */}
-                <Grid item xs={4} sx={{ order: { xs: 2, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.1: Temperature (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 2, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.1: Temperature
@@ -67,9 +67,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.2: Humidity */}
-                <Grid item xs={4} sx={{ order: { xs: 3, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.2: Humidity (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 3, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.2: Humidity
@@ -79,9 +79,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.3: Speed */}
-                <Grid item xs={4} sx={{ order: { xs: 4, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.3: Speed (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 4, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.3: Speed
@@ -91,9 +91,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.4: Battery */}
-                <Grid item xs={4} sx={{ order: { xs: 5, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.4: Battery (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 5, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.4: Battery
@@ -103,9 +103,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.5: Door */}
-                <Grid item xs={4} sx={{ order: { xs: 6, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.5: Door (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 6, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.5: Door
@@ -115,9 +115,9 @@ export const DeviceDashboardNew = () => {
                     </Card>
                 </Grid>
 
-                {/* Card 3.6: Movement */}
-                <Grid item xs={4} sx={{ order: { xs: 7, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                {/* Card 3.6: Movement (3 columns, 3 rows) */}
+                <Grid item xs={4} md={3} sx={{ order: { xs: 7, md: 0 } }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 3.6: Movement
