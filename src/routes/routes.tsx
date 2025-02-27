@@ -7,9 +7,10 @@ import { Devices } from '../pages/Devices';
 import { DeviceMap } from '../pages/DeviceMap';
 import { Reports } from '../pages/Reports';
 import { Settings } from '../pages/Settings';
-import {DeviceDashboard} from "../pages/DeviceDashboard";
-import {EditDevice} from "../pages/EditDevice";
-import {CreateDevice} from "../pages/CreateDevice";
+import { DeviceDashboard } from "../pages/DeviceDashboard";
+import { DeviceDashboardNew} from "../pages/DeviceDashboardNew";
+import { EditDevice } from "../pages/EditDevice";
+import { CreateDevice } from "../pages/CreateDevice";
 
 export const routes: RouteObject[] = [
   { path: '/login', element: <Login /> },
@@ -23,6 +24,7 @@ export const routes: RouteObject[] = [
       { path: '/', element: <Dashboard /> },
       { path: '/devices', element: <Devices /> },
       { path: '/devices/:id', element: <DeviceDashboard /> },
+      { path: '/devices/:id/new', element: <DeviceDashboardNew /> },
       { path: '/devices/:id/edit', element: <EditDevice /> },
       { path: '/devices/create', element: <CreateDevice /> },
       { path: '/device-map', element: <DeviceMap /> },

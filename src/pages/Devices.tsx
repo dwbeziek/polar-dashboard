@@ -14,7 +14,7 @@ export const Devices = () => {
   const queryClient = useQueryClient();
 
   const [searchParams, setSearchParams] = useState({ name: '', imei: '', code: '' });
-  const [searchTrigger, setSearchTrigger] = useState({ name: '', imei: '', code: '' }); // Triggered search values
+  const [searchTrigger, setSearchTrigger] = useState({ name: '', imei: '', code: '' });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedDevice, setSelectedDevice] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -55,7 +55,7 @@ export const Devices = () => {
   };
 
   const handleSearchSubmit = () => {
-    setSearchTrigger(searchParams); // Trigger search with current params
+    setSearchTrigger(searchParams);
   };
 
   if (isLoading) return <Typography>Loading...</Typography>;
@@ -118,6 +118,9 @@ export const Devices = () => {
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           <MenuItem component={Link} to={`/devices/${selectedDevice?.id}`} onClick={handleMenuClose}>
             {t('viewData')}
+          </MenuItem>
+          <MenuItem component={Link} to={`/devices/${selectedDevice?.id}/new`} onClick={handleMenuClose}>
+            {t('viewNewDashboard')}
           </MenuItem>
           <MenuItem component={Link} to={`/devices/${selectedDevice?.id}/edit`} onClick={handleMenuClose}>
             {t('edit')}

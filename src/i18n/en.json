@@ -62,5 +62,6 @@
   "hoursAgo": "hours ago",
   "humidity": "Humidity",
   "movement_count": "Movement Count",
-  "battery_voltage": "Battery Voltage"
+  "battery_voltage": "Battery Voltage",
+  "viewNewDashboard": "View New Dashboard"
 }
