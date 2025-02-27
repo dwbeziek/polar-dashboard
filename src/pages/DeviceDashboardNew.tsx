@@ -29,98 +29,95 @@ export const DeviceDashboardNew = () => {
                 </CardContent>
             </Card>
 
-            {/* Main Grid: 12 columns, 12 rows */}
-            <Grid container spacing={2} sx={{ height: 'calc(100vh - 200px)' }}> {/* Adjust height for 12 rows */}
-                {/* Card 1: Location (9 columns, 6 rows) */}
+            {/* Outer Grid: Split into Left (9 cols) and Right (3 cols) */}
+            <Grid container spacing={2}>
+                {/* Left Grid: Card 1 and Cards 3.1-3.6 (9 columns) */}
                 <Grid item xs={12} md={9} sx={{ order: { xs: 1, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '50%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 1: Location
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
+                    <Grid container spacing={2} sx={{ height: 'calc(100vh - 200px)' }}>
+                        {/* Card 1: Location (9 columns, 6 rows) */}
+                        <Grid item xs={12}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '50%' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 1: Location
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        {/* Cards 3.1-3.3 (3 columns each, 3 rows) */}
+                        <Grid item xs={4} sx={{ order: { xs: 2 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.1: Temperature
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} sx={{ order: { xs: 3 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.2: Humidity
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} sx={{ order: { xs: 4 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.3: Speed
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        {/* Cards 3.4-3.6 (3 columns each, 3 rows) */}
+                        <Grid item xs={4} sx={{ order: { xs: 5 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.4: Battery
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} sx={{ order: { xs: 6 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.5: Door
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} sx={{ order: { xs: 7 } }}>
+                            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, aspectRatio: '1/1' }}>
+                                <CardContent>
+                                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                        Card 3.6: Movement
+                                    </Typography>
+                                    <Typography>Placeholder</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
                 </Grid>
 
-                {/* Card 2: Notifications (3 columns, 12 rows, last on mobile) */}
+                {/* Right Grid: Card 2 (3 columns, 12 rows) */}
                 <Grid item xs={12} md={3} sx={{ order: { xs: 8, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '100%' }}>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: 'calc(100vh - 200px)' }}>
                         <CardContent>
                             <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
                                 Card 2: Notifications
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.1: Temperature (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 2, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.1: Temperature
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.2: Humidity (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 3, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.2: Humidity
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.3: Speed (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 4, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.3: Speed
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.4: Battery (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 5, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.4: Battery
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.5: Door (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 6, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.5: Door
-                            </Typography>
-                            <Typography>Placeholder</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Card 3.6: Movement (3 columns, 3 rows) */}
-                <Grid item xs={4} md={3} sx={{ order: { xs: 7, md: 0 } }}>
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '25%' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                Card 3.6: Movement
                             </Typography>
                             <Typography>Placeholder</Typography>
                         </CardContent>
