@@ -14,12 +14,16 @@ import {fetchLatestDeviceData} from "../api/deviceData";
 import {fetchThresholdsByDevice} from "../api/thresholds";
 import {fetchNotificationsByDevice} from "../api/notifications";
 import {fetchDeviceDetails} from "../api/devices";
+import {useEffect, useState} from "react";
 
 export const DeviceDashboardNew = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const theme = useTheme();
-    const navigate = useNavigate();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [currentThresholdIndex, setCurrentThresholdIndex] = useState(0);
 
     const { data: latestData, isLoading: isLoadingLatest, error: errorLatest } = useQuery({
         queryKey: ['latestDeviceData', id],
@@ -42,6 +46,28 @@ export const DeviceDashboardNew = () => {
         queryKey: ['deviceDetails', id],
         queryFn: () => fetchDeviceDetails(id!),
     });
+
+    useEffect(() => {
+        if (thresholds && thresholds.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentThresholdIndex((prev) => (prev + 1) % thresholds.length);
+            }, 3000); // Cycle every 3 seconds
+            return () => clearInterval(interval);
+        }
+    }, [thresholds]);
+
+    if (isLoadingLatest || isLoadingDevice) return <Typography>Loading...</Typography>;
+    if (errorLatest) return <Typography color="error">Error: {(errorLatest as Error).message}</Typography>;
+
+    console.log('Latest Data:', latestData); // Debug log
+    const latest = latestData?.results[0] || {};
+
+    const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
 
 
     const handleDetailClick = (metric: string) => {
@@ -71,7 +97,7 @@ export const DeviceDashboardNew = () => {
                     {deviceDetails?.name || ''} - {deviceDetails?.code || ''}
                 </Typography>
                 <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mt: 1 }}>
-                    {deviceDetails?.description || 'N/A'}
+                    {deviceDetails?.description || ''}
                 </Typography>
                 <Typography
                     variant="body2"
@@ -154,7 +180,7 @@ export const DeviceDashboardNew = () => {
                 >
                     <MetricCard
                         title="Temperature"
-                        value={19}
+                        value={latest.sensorData["TEMPERATURE"].value}
                         unit="°C"
                         icon={<ThermostatOutlinedIcon />}
                         status="Good"
