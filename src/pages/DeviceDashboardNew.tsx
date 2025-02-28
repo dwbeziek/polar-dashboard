@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {MetricCard} from "../components/MetricCard";
 import Battery0BarIcon from '@mui/icons-material/Battery0Bar';
 import ThermostatOutlinedIcon from "@mui/icons-material/ThermostatOutlined";
@@ -9,11 +9,40 @@ import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined'; // Speed
 import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined'; // Door
 import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
 import {GaugeMetricCard} from "../components/GaugeMetricCard";
+import {useQuery} from "@tanstack/react-query";
+import {fetchLatestDeviceData} from "../api/deviceData";
+import {fetchThresholdsByDevice} from "../api/thresholds";
+import {fetchNotificationsByDevice} from "../api/notifications";
+import {fetchDeviceDetails} from "../api/devices";
 
 export const DeviceDashboardNew = () => {
+    const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
     const theme = useTheme();
     const navigate = useNavigate();
+
+    const { data: latestData, isLoading: isLoadingLatest, error: errorLatest } = useQuery({
+        queryKey: ['latestDeviceData', id],
+        queryFn: () => fetchLatestDeviceData(id!),
+        refetchInterval: 5000,
+        refetchOnWindowFocus: false,
+    });
+
+    const { data: thresholds, isLoading: isLoadingThresholds } = useQuery({
+        queryKey: ['thresholds', id],
+        queryFn: () => fetchThresholdsByDevice(id!),
+    });
+
+    const { data: notifications, isLoading: isLoadingNotifications } = useQuery({
+        queryKey: ['notifications', id],
+        queryFn: () => fetchNotificationsByDevice(id!),
+    });
+
+    const { data: deviceDetails, isLoading: isLoadingDevice } = useQuery({
+        queryKey: ['deviceDetails', id],
+        queryFn: () => fetchDeviceDetails(id!),
+    });
+
 
     const handleDetailClick = (metric: string) => {
         console.log(`Navigate to ${metric} detail screen`); // Placeholder
@@ -31,14 +60,26 @@ export const DeviceDashboardNew = () => {
             </Box>
 
             {/* Device Info Card (Full-width) */}
-            <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, mb: 2, flex: '0 0 auto' }}>
-                <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                        Device Info (Card)
-                    </Typography>
-                    <Typography>Placeholder</Typography>
-                </CardContent>
-            </Card>
+            <Box
+                sx={{
+                    py: 2,
+                    mb: 2,
+                    position: 'relative',
+                }}
+            >
+                <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                    {deviceDetails?.name || ''} - {deviceDetails?.code || ''}
+                </Typography>
+                <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mt: 1 }}>
+                    {deviceDetails?.description || 'N/A'}
+                </Typography>
+                <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.secondary, position: 'absolute', bottom: 8, right: 8 }}
+                >
+                    IMEI: {deviceDetails?.imei || ''}
+                </Typography>
+            </Box>
 
             {/* Main Grid: 12 columns, 12 rows */}
             <Box
