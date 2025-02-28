@@ -47,11 +47,8 @@ export const MetricCard = ({
                 }}
             >
                 {/* Top Section: Icon and Title (Left-Aligned) */}
-                <Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0 }}>
-                    <Box sx={{ color: theme.palette.text.primary, mr: 1 }}>{icon}</Box>
-                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                        {title}
-                    </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'start', position: 'relative', mt: 0 , mb: 0}}>
+                    <Box sx={{ color: theme.palette.text.primary }}>{icon}</Box>
                     {/* Detail Button (Top Right) */}
                     <IconButton
                         onClick={onDetailClick}
@@ -61,9 +58,15 @@ export const MetricCard = ({
                     </IconButton>
                 </Box>
 
+                <Box sx={{ display: 'flex', alignItems: 'start', position: 'relative', mt: 0 }}>
+                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
+                        {title}
+                    </Typography>
+                </Box>
+
                 {/* Middle Section: Value and Status */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-                    <Typography variant="h3" sx={{ fontWeight: 500, fontSize: '5rem', color: theme.palette.text.primary, pr: 0, mr: 0 }}>
+                    <Typography variant="h3" sx={{ fontWeight: 500, fontSize: '4.5rem', color: theme.palette.text.primary, pr: 0, mr: 0 }}>
                         {value} <Typography  component="span" sx={{ fontSize: '3.5rem', pl: 0, ml: 0 }}>{unit}</Typography>
                     </Typography>
                 </Box>
