@@ -1,11 +1,17 @@
 import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import {MetricCard} from "../components/MetricCard";
+import ThermostatOutlinedIcon from "@mui/icons-material/ThermostatOutlined";
 
 export const DeviceDashboardNew = () => {
     const { t } = useTranslation();
     const theme = useTheme();
     const navigate = useNavigate();
+
+    const handleDetailClick = () => {
+        console.log('Navigate to Temperature detail screen'); // Placeholder
+    };
 
     return (
         <Box sx={{ p: 3, height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -100,12 +106,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.1: Temperature
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <MetricCard
+                        title="Temperature"
+                        value={19}
+                        unit="°C"
+                        icon={<ThermostatOutlinedIcon />}
+                        status="Good"
+                        thresholdInfo="Keep between 20°C and 30°C"
+                        onDetailClick={handleDetailClick}
+                    />
                 </Card>
 
                 {/* Card 3.2: Humidity (3 columns, 3 rows) */}

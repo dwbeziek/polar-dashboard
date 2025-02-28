@@ -1,15 +1,15 @@
 import { Box, Card, CardContent, Chip, IconButton, Typography, useTheme } from '@mui/material';
 import { ReactNode } from 'react';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; // Outlined for detail button
+import ArrowOutwardOutlinedIcon from '@mui/icons-material/ArrowOutwardOutlined'; // Outlined for detail button
 
 interface MetricCardProps {
     title: string;
     value: number | string;
     unit: string;
     icon: ReactNode;
-    status?: 'Good' | 'High' | 'Low'; // Shortened status
-    thresholdInfo?: string; // User-friendly threshold
-    onDetailClick?: () => void; // Callback for detail button
+    status?: 'Good' | 'High' | 'Low';
+    thresholdInfo?: string;
+    onDetailClick?: () => void;
 }
 
 export const MetricCard = ({
@@ -46,34 +46,26 @@ export const MetricCard = ({
                     justifyContent: 'space-between',
                 }}
             >
-                {/* Top Section: Icon and Title */}
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', position: 'relative' }}>
-                    <Box sx={{ fontSize: '2.5rem', color: theme.palette.text.primary, mb:0, pb:0 }}>{icon}</Box> {/* Larger icon */}
-                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem', mt:0, pt:0 }}>
+                {/* Top Section: Icon and Title (Left-Aligned) */}
+                <Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0 }}>
+                    <Box sx={{ color: theme.palette.text.primary, mr: 1 }}>{icon}</Box>
+                    <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
                         {title}
                     </Typography>
                     {/* Detail Button (Top Right) */}
                     <IconButton
                         onClick={onDetailClick}
-                        sx={{ position: 'absolute', top: 8, right: 8, color: theme.palette.text.primary }}
+                        sx={{ position: 'absolute', top: -10, right: -10, color: theme.palette.text.primary }}
                     >
-                        <InfoOutlinedIcon fontSize="small" /> {/* Outlined icon */}
+                        <ArrowOutwardOutlinedIcon fontSize="small" />
                     </IconButton>
                 </Box>
 
                 {/* Middle Section: Value and Status */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-                    <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
-                        {value} <Typography component="span" sx={{ fontSize: '1.5rem' }}>{unit}</Typography>
+                    <Typography variant="h3" sx={{ fontWeight: 500, fontSize: '5rem', color: theme.palette.text.primary, pr: 0, mr: 0 }}>
+                        {value} <Typography  component="span" sx={{ fontSize: '3.5rem', pl: 0, ml: 0 }}>{unit}</Typography>
                     </Typography>
-                    {status && (
-                        <Chip
-                            label={status}
-                            color={statusColor}
-                            size="small"
-                            sx={{ fontWeight: 500, borderRadius: '12px', px: 1 }}
-                        />
-                    )}
                 </Box>
 
                 {/* Bottom Section: Threshold Info */}
