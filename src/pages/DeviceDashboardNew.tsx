@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/material';
+import {Badge, Box, Button, Card, CardContent, List, ListItem, ListItemText, Typography, useTheme} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import {MetricCard} from "../components/MetricCard";
@@ -8,6 +8,7 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined'; // Speed
 import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined'; // Door
 import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {GaugeMetricCard} from "../components/GaugeMetricCard";
 import {useQuery} from "@tanstack/react-query";
 import {fetchLatestDeviceData} from "../api/deviceData";
@@ -181,12 +182,36 @@ export const DeviceDashboardNew = () => {
                         order: { xs: 8, md: 0 },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                            Card 2: Notifications
-                        </Typography>
-                        <Typography>Placeholder</Typography>
-                    </CardContent>
+                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '100%' }}>
+                        <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                <Badge badgeContent={notifications?.length || 0} color="primary">
+                                    <NotificationsIcon sx={{ color: theme.palette.text.secondary, mr: 1 }} />
+                                </Badge>
+                                <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                                    Notifications
+                                </Typography>
+                            </Box>
+                            <List sx={{ flexGrow: 1, overflow: 'auto' }}>
+                                {notifications && notifications.length > 0 ? (
+                                    notifications.map((notification: Notification) => (
+                                        <ListItem key={notification.id} sx={{ py: 0.5 }}>
+                                            <ListItemText
+                                                primary={notification.message}
+                                                secondary={new Date(notification.timestamp).toLocaleString()}
+                                                primaryTypographyProps={{ variant: 'body2', color: theme.palette.text.primary }}
+                                                secondaryTypographyProps={{ variant: 'caption', color: theme.palette.text.secondary }}
+                                            />
+                                        </ListItem>
+                                    ))
+                                ) : (
+                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                                        No notifications
+                                    </Typography>
+                                )}
+                            </List>
+                        </CardContent>
+                    </Card>
                 </Card>
 
                 {/* Card 3.1: Temperature (3 columns, 3 rows) */}
