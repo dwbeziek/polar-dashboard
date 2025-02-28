@@ -3,16 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {MetricCard} from "../components/MetricCard";
 import ThermostatOutlinedIcon from "@mui/icons-material/ThermostatOutlined";
+import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined'; // Speed
+import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined'; // Door
+import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
 
 export const DeviceDashboardNew = () => {
     const { t } = useTranslation();
     const theme = useTheme();
     const navigate = useNavigate();
 
-    const handleDetailClick = () => {
-        console.log('Navigate to Temperature detail screen'); // Placeholder
+    const handleDetailClick = (metric: string) => {
+        console.log(`Navigate to ${metric} detail screen`); // Placeholder
     };
-
     return (
         <Box sx={{ p: 3, height: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Title and Back Button */}
@@ -113,7 +115,7 @@ export const DeviceDashboardNew = () => {
                         icon={<ThermostatOutlinedIcon />}
                         status="Good"
                         thresholdInfo="Keep between 20°C and 30°C"
-                        onDetailClick={handleDetailClick}
+                        onDetailClick={() => handleDetailClick('Temperature')}
                     />
                 </Card>
 
@@ -157,12 +159,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.3: Speed
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <MetricCard
+                        title="Speed"
+                        value={45}
+                        unit="km/h"
+                        icon={<SpeedOutlinedIcon />}
+                        status="Good"
+                        thresholdInfo="Keep below 80 km/h"
+                        onDetailClick={() => handleDetailClick('Speed')}
+                    />
                 </Card>
 
                 {/* Card 3.4: Battery (3 columns, 3 rows) */}
@@ -205,12 +210,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.5: Door
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <MetricCard
+                        title="Door"
+                        value={2} // Number of times opened as placeholder
+                        unit="times"
+                        icon={<DoorFrontOutlinedIcon />}
+                        status="Good"
+                        thresholdInfo="Max 5 times per hour"
+                        onDetailClick={() => handleDetailClick('Door')}
+                    />
                 </Card>
 
                 {/* Card 3.6: Movement (3 columns, 3 rows) */}
@@ -229,12 +237,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.6: Movement
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <MetricCard
+                        title="Movement"
+                        value={1}
+                        unit=""
+                        icon={<DirectionsRunOutlinedIcon />}
+                        status="Good"
+                        thresholdInfo="Detected when moving"
+                        onDetailClick={() => handleDetailClick('Movement')}
+                      />
                 </Card>
             </Box>
         </Box>

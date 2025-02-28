@@ -67,7 +67,7 @@ export const MetricCard = ({
                 {/* Middle Section: Value and Status */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
                     <Typography variant="h3" sx={{ fontWeight: 500, fontSize: '4.5rem', color: theme.palette.text.primary, pr: 0, mr: 0 }}>
-                        {value} <Typography  component="span" sx={{ fontSize: '3.5rem', pl: 0, ml: 0 }}>{unit}</Typography>
+                        {value} <Typography  component="span" sx={{ fontSize: '2rem', pl: 0, ml: 0 }}>{unit}</Typography>
                     </Typography>
                 </Box>
 
