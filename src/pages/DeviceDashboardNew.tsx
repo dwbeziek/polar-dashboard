@@ -15,6 +15,7 @@ import {fetchThresholdsByDevice} from "../api/thresholds";
 import {fetchNotificationsByDevice} from "../api/notifications";
 import {fetchDeviceDetails} from "../api/devices";
 import {useEffect, useState} from "react";
+import {SensorData} from "../types/device";
 
 export const DeviceDashboardNew = () => {
     const { id } = useParams<{ id: string }>();
@@ -59,7 +60,7 @@ export const DeviceDashboardNew = () => {
     if (isLoadingLatest || isLoadingDevice) return <Typography>Loading...</Typography>;
     if (errorLatest) return <Typography color="error">Error: {(errorLatest as Error).message}</Typography>;
 
-    console.log('Latest Data:', latestData); // Debug log
+    // console.log('Latest Data:', latestData); // Debug log
     const latest = latestData?.results[0] || {};
 
     const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
@@ -68,6 +69,32 @@ export const DeviceDashboardNew = () => {
         setPage(0);
     };
 
+    // Map sensor types to parameter codes for Sensor 1
+    const sensorMappings = {
+        TEMPERATURE: 10801,
+        HUMIDITY: 10804,
+        BATTERY_VOLTAGE: 10824,
+        MOVEMENT_COUNT: 10836,
+    };
+
+    const getSensorReading = (sensorType: string) => {
+        const parameterCode = sensorMappings[sensorType as keyof typeof sensorMappings];
+        const reading = latest.sensorData?.find((s: SensorData ) => {
+            const matches = s.sensorType === sensorType && String(s.parameterCode) === String(parameterCode); // String coercion
+            return matches;
+        }) || { value: 0, unit: '' }; // Fallback object
+        return {
+            value: reading.value ?? 0,
+            unit: reading.unit ?? '',
+        };
+    };
+
+    const temperature = getSensorReading('TEMPERATURE');
+    const humidity = getSensorReading('HUMIDITY');
+    const batteryVoltage = getSensorReading('BATTERY_VOLTAGE');
+    const doorOpens = getSensorReading('MOVEMENT_COUNT'); // should be magnetic
+    const speed = { value: latestData?.speed ?? 0, unit: 'km/h' }; // Speed from device data
+    const movement = getSensorReading('MOVEMENT_COUNT');
 
 
     const handleDetailClick = (metric: string) => {
@@ -180,8 +207,8 @@ export const DeviceDashboardNew = () => {
                 >
                     <MetricCard
                         title="Temperature"
-                        value={latest.sensorData["TEMPERATURE"].value}
-                        unit="°C"
+                        value={temperature.value}
+                        unit={temperature.unit}
                         icon={<ThermostatOutlinedIcon />}
                         status="Good"
                         thresholdInfo="Keep between 20°C and 30°C"
@@ -207,8 +234,8 @@ export const DeviceDashboardNew = () => {
                 >
                     <GaugeMetricCard
                         title="Humidity"
-                        value={34}
-                        unit="%"
+                        value={humidity.value}
+                        unit={humidity.unit}
                         icon={<WaterDropOutlinedIcon />}
                         status="Good"
                         thresholdInfo="Keep between 30% and 70%"
@@ -234,8 +261,8 @@ export const DeviceDashboardNew = () => {
                 >
                     <MetricCard
                         title="Speed"
-                        value={45}
-                        unit="km/h"
+                        value={speed.value}
+                        unit={speed.unit}
                         icon={<SpeedOutlinedIcon />}
                         status="Good"
                         thresholdInfo="Keep below 80 km/h"
@@ -261,8 +288,8 @@ export const DeviceDashboardNew = () => {
                 >
                     <GaugeMetricCard
                         title="Battery"
-                        value={79}
-                        unit="%"
+                        value={batteryVoltage.value}
+                        unit={batteryVoltage.unit}
                         icon={<Battery0BarIcon />}
                         status="Good"
                         thresholdInfo="Plan replacement at 15%"
@@ -315,8 +342,8 @@ export const DeviceDashboardNew = () => {
                 >
                     <MetricCard
                         title="Movement"
-                        value={1}
-                        unit=""
+                        value={movement.value}
+                        unit={movement.unit}
                         icon={<DirectionsRunOutlinedIcon />}
                         status="Good"
                         thresholdInfo="Detected when moving"
