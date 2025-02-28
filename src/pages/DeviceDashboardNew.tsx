@@ -2,10 +2,13 @@ import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/mater
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {MetricCard} from "../components/MetricCard";
+import Battery0BarIcon from '@mui/icons-material/Battery0Bar';
 import ThermostatOutlinedIcon from "@mui/icons-material/ThermostatOutlined";
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined'; // Speed
 import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined'; // Door
 import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
+import {GaugeMetricCard} from "../components/GaugeMetricCard";
 
 export const DeviceDashboardNew = () => {
     const { t } = useTranslation();
@@ -135,12 +138,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.2: Humidity
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <GaugeMetricCard
+                        title="Humidity"
+                        value={34}
+                        unit="%"
+                        icon={<WaterDropOutlinedIcon />}
+                        status="Good"
+                        thresholdInfo="Keep between 30% and 70%"
+                        onDetailClick={() => handleDetailClick('Humidity')}
+                    />
                 </Card>
 
                 {/* Card 3.3: Speed (3 columns, 3 rows) */}
@@ -186,12 +192,15 @@ export const DeviceDashboardNew = () => {
                         },
                     }}
                 >
-                    <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontSize: '1rem' }}>
-                            Card 3.4: Battery
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.875rem' }}>Placeholder</Typography>
-                    </CardContent>
+                    <GaugeMetricCard
+                        title="Battery"
+                        value={79}
+                        unit="%"
+                        icon={<Battery0BarIcon />}
+                        status="Good"
+                        thresholdInfo="Plan replacement at 15%"
+                        onDetailClick={() => handleDetailClick('Battery')}
+                    />
                 </Card>
 
                 {/* Card 3.5: Door (3 columns, 3 rows) */}
