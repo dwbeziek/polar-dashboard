@@ -8,6 +8,7 @@ import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineC
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { fetchNotificationsByDevice } from '../api/notifications';
+import {blue} from "@mui/material/colors";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -78,17 +79,11 @@ export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
                                 return (
                                     <TimelineItem key={notification.id} sx={{ mb: 1 }}>
                                         <TimelineSeparator>
-                                            <Badge
-                                                badgeContent={<CircleIcon sx={{ fontSize: 8 }} />}
+                                            <CircleIcon color={'blue'}
                                                 sx={{
-                                                    '& .MuiBadge-badge': {
-                                                        width: 8,
-                                                        height: 8,
-                                                        borderRadius: '50%',
-                                                        minWidth: 0,
-                                                        p: 0,
-                                                        bgcolor: notification.read ? theme.palette.grey[500] : theme.palette.primary.main, // Explicit colors
-                                                    },
+                                                    fontSize: 10,
+                                                    // color: notification.read ? theme.palette.grey[500] : theme.palette.primary.main, // Direct color
+                                                    color: blue,
                                                     ml: 0.5,
                                                 }}
                                             />
@@ -97,7 +92,7 @@ export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
                                             )}
                                         </TimelineSeparator>
                                         <TimelineContent sx={{ py: 0.5, pl: 1.5, pr: 0 }}>
-                                            <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '六年级rem' }}>
+                                            <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}>
                                                 {notification.message}
                                             </Typography>
                                             <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem' }}>
