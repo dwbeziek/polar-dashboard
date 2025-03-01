@@ -2,20 +2,16 @@ import { Box, Card, CardContent, Typography, Badge, IconButton } from '@mui/mate
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CircleIcon from '@mui/icons-material/Circle'; // For badge content
 import { useTheme } from '@mui/material/styles';
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent } from '@mui/lab';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react'; // For pagination state
-import { fetchNotificationsByDevice } from '../api/notifications'; // Adjust path if needed
+import { useState } from 'react';
+import { fetchNotificationsByDevice } from '../api/notifications';
 
+const ITEMS_PER_PAGE = 8; // Reduced to 4
 
-interface NotificationCardProps {
-    deviceId: string;
-}
-
-const ITEMS_PER_PAGE = 5; // Adjustable
-
-export const NotificationCard = ({ deviceId }: NotificationCardProps) => {
+export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
     const theme = useTheme();
     const [page, setPage] = useState(0);
 
@@ -53,14 +49,14 @@ export const NotificationCard = ({ deviceId }: NotificationCardProps) => {
         >
             <CardContent
                 sx={{
-                    p: 1,
-                    '&:last-child': { pb: 1 },
+                    p: 2,
+                    '&:last-child': { pb: 2 },
                     flexGrow: 1,
                     display: 'flex',
                     flexDirection: 'column',
                 }}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <Badge badgeContent={totalNotifications} color="primary">
                         <NotificationsIcon sx={{ color: theme.palette.text.secondary, mr: 1 }} />
                     </Badge>
@@ -69,26 +65,36 @@ export const NotificationCard = ({ deviceId }: NotificationCardProps) => {
                     </Typography>
                 </Box>
                 <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
-                    <Timeline sx={{ m: 0, p: 0 }}>
+                    <Timeline
+                        sx={{
+                            m: 0,
+                            p: 0,
+                            '& .MuiTimelineItem-root:before': { display: 'none' }, // Minimal left padding
+                        }}
+                    >
                         {paginatedNotifications.length > 0 ? (
                             paginatedNotifications.map((notification, index) => (
-                                <TimelineItem key={notification.id}>
+                                <TimelineItem key={notification.id} sx={{ mb: 1 }}>
                                     <TimelineSeparator>
-                                        <TimelineDot
-                                            variant={notification.read ? 'outlined' : 'filled'}
+                                        <Badge
+                                            badgeContent={<CircleIcon sx={{ fontSize: 8 }} />}
+                                            color={notification.read ? 'default' : 'primary'} // Grey for read, blue for unread
                                             sx={{
-                                                bgcolor: notification.read ? 'transparent' : theme.palette.primary.main,
-                                                borderColor: theme.palette.primary.main,
-                                                width: 8, // Smaller dot
-                                                height: 8,
-                                                m: 0,
+                                                '& .MuiBadge-badge': {
+                                                    width: 8,
+                                                    height: 8,
+                                                    borderRadius: '50%',
+                                                    minWidth: 0,
+                                                    p: 0,
+                                                },
+                                                ml: 0.5,
                                             }}
                                         />
                                         {index < paginatedNotifications.length - 1 && (
-                                            <TimelineConnector sx={{ bgcolor: theme.palette.divider, width: 1 }} />
+                                            <TimelineConnector sx={{ bgcolor: theme.palette.divider, width: 1, ml: 0.5 }} />
                                         )}
                                     </TimelineSeparator>
-                                    <TimelineContent sx={{ py: 0.25, px: 1 }}> {/* Reduced padding */}
+                                    <TimelineContent sx={{ py: 0.5, pl: 1.5, pr: 0 }}>
                                         <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}>
                                             {notification.message}
                                         </Typography>
@@ -106,7 +112,7 @@ export const NotificationCard = ({ deviceId }: NotificationCardProps) => {
                     </Timeline>
                 </Box>
                 {totalNotifications > ITEMS_PER_PAGE && (
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                         <IconButton
                             onClick={handlePreviousPage}
                             disabled={page === 0}
