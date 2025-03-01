@@ -18,6 +18,7 @@ import {fetchDeviceDetails} from "../api/devices";
 import {useEffect, useState} from "react";
 import {SensorData} from "../types/device";
 import {NotificationCard} from "../components/NotificationCard";
+import {DeviceLocationMonitor} from "../components/DeviceLocationMonitor";
 
 export const DeviceDashboardNew = () => {
     const { id } = useParams<{ id: string }>();
@@ -164,10 +165,7 @@ export const DeviceDashboardNew = () => {
                     }}
                 >
                     <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%' }}>
-                        <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                            Card 1: Location
-                        </Typography>
-                        <Typography>Placeholder</Typography>
+                        <DeviceLocationMonitor deviceData={latest}/>
                     </CardContent>
                 </Card>
 

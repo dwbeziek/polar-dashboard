@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { fetchNotificationsByDevice } from '../api/notifications';
 import {blue} from "@mui/material/colors";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 5;
 
 export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
     const theme = useTheme();
