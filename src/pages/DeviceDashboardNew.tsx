@@ -151,7 +151,7 @@ export const DeviceDashboardNew = () => {
                 }}
             >
                 {/* Card 1: Location (9 columns, 6 rows) */}
-                <Card container spacing={2}
+                <Card spacing={2}
                     sx={{
                         gridColumn: '1 / span 9',
                         gridRow: '1 / span 6',
@@ -171,7 +171,7 @@ export const DeviceDashboardNew = () => {
                 </Card>
 
                 {/* Card 2: Notifications (3 columns, 12 rows) */}
-                <Card container spacing={2}
+                <Card spacing={2}
                     sx={{
                         gridColumn: '10 / span 3',
                         gridRow: '1 / span 12',
@@ -215,7 +215,7 @@ export const DeviceDashboardNew = () => {
                 </Card>
 
                 {/* Card 3.1: Temperature (3 columns, 3 rows) */}
-                <Card container spacing={2}
+                <Card spacing={2}
                     sx={{
                         gridColumn: '1 / span 3',
                         gridRow: '7 / span 3',
@@ -242,7 +242,7 @@ export const DeviceDashboardNew = () => {
                 </Card>
 
                 {/* Card 3.2: Humidity (3 columns, 3 rows) */}
-                <Card container spacing={2}
+                <Card spacing={2}
                     sx={{
                         gridColumn: '4 / span 3',
                         gridRow: '7 / span 3',
