@@ -17,6 +17,7 @@ import {fetchNotificationsByDevice} from "../api/notifications";
 import {fetchDeviceDetails} from "../api/devices";
 import {useEffect, useState} from "react";
 import {SensorData} from "../types/device";
+import {NotificationCard} from "../components/NotificationCard";
 
 export const DeviceDashboardNew = () => {
     const { id } = useParams<{ id: string }>();
@@ -39,10 +40,10 @@ export const DeviceDashboardNew = () => {
         queryFn: () => fetchThresholdsByDevice(id!),
     });
 
-    const { data: notifications, isLoading: isLoadingNotifications } = useQuery({
-        queryKey: ['notifications', id],
-        queryFn: () => fetchNotificationsByDevice(id!),
-    });
+    // const { data: notifications, isLoading: isLoadingNotifications } = useQuery({
+    //     queryKey: ['notifications', id],
+    //     queryFn: () => fetchNotificationsByDevice(id!),
+    // });
 
     const { data: deviceDetails, isLoading: isLoadingDevice } = useQuery({
         queryKey: ['deviceDetails', id],
@@ -61,7 +62,7 @@ export const DeviceDashboardNew = () => {
     if (isLoadingLatest || isLoadingDevice) return <Typography>Loading...</Typography>;
     if (errorLatest) return <Typography color="error">Error: {(errorLatest as Error).message}</Typography>;
 
-    // console.log('Latest Data:', latestData); // Debug log
+    // console.log('Notifications:', notifications); // Debug log
     const latest = latestData?.results[0] || {};
 
     const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
@@ -182,36 +183,7 @@ export const DeviceDashboardNew = () => {
                         order: { xs: 8, md: 0 },
                     }}
                 >
-                    <Card sx={{ bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 1, height: '100%' }}>
-                        <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                <Badge badgeContent={notifications?.length || 0} color="primary">
-                                    <NotificationsIcon sx={{ color: theme.palette.text.secondary, mr: 1 }} />
-                                </Badge>
-                                <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
-                                    Notifications
-                                </Typography>
-                            </Box>
-                            <List sx={{ flexGrow: 1, overflow: 'auto' }}>
-                                {notifications && notifications.length > 0 ? (
-                                    notifications.map((notification: Notification) => (
-                                        <ListItem key={notification.id} sx={{ py: 0.5 }}>
-                                            <ListItemText
-                                                primary={notification.message}
-                                                secondary={new Date(notification.timestamp).toLocaleString()}
-                                                primaryTypographyProps={{ variant: 'body2', color: theme.palette.text.primary }}
-                                                secondaryTypographyProps={{ variant: 'caption', color: theme.palette.text.secondary }}
-                                            />
-                                        </ListItem>
-                                    ))
-                                ) : (
-                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
-                                        No notifications
-                                    </Typography>
-                                )}
-                            </List>
-                        </CardContent>
-                    </Card>
+                    <NotificationCard deviceId={id} />
                 </Card>
 
                 {/* Card 3.1: Temperature (3 columns, 3 rows) */}
