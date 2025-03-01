@@ -2,14 +2,14 @@ import { Box, Card, CardContent, Typography, Badge, IconButton } from '@mui/mate
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CircleIcon from '@mui/icons-material/Circle'; // For badge content
+import CircleIcon from '@mui/icons-material/Circle';
 import { useTheme } from '@mui/material/styles';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent } from '@mui/lab';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { fetchNotificationsByDevice } from '../api/notifications';
 
-const ITEMS_PER_PAGE = 8; // Reduced to 4
+const ITEMS_PER_PAGE = 10;
 
 export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
     const theme = useTheme();
@@ -69,41 +69,44 @@ export const NotificationCard = ({ deviceId }: { deviceId: string }) => {
                         sx={{
                             m: 0,
                             p: 0,
-                            '& .MuiTimelineItem-root:before': { display: 'none' }, // Minimal left padding
+                            '& .MuiTimelineItem-root:before': { display: 'none' },
                         }}
                     >
                         {paginatedNotifications.length > 0 ? (
-                            paginatedNotifications.map((notification, index) => (
-                                <TimelineItem key={notification.id} sx={{ mb: 1 }}>
-                                    <TimelineSeparator>
-                                        <Badge
-                                            badgeContent={<CircleIcon sx={{ fontSize: 8 }} />}
-                                            color={notification.read ? 'default' : 'primary'} // Grey for read, blue for unread
-                                            sx={{
-                                                '& .MuiBadge-badge': {
-                                                    width: 8,
-                                                    height: 8,
-                                                    borderRadius: '50%',
-                                                    minWidth: 0,
-                                                    p: 0,
-                                                },
-                                                ml: 0.5,
-                                            }}
-                                        />
-                                        {index < paginatedNotifications.length - 1 && (
-                                            <TimelineConnector sx={{ bgcolor: theme.palette.divider, width: 1, ml: 0.5 }} />
-                                        )}
-                                    </TimelineSeparator>
-                                    <TimelineContent sx={{ py: 0.5, pl: 1.5, pr: 0 }}>
-                                        <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '0.875rem' }}>
-                                            {notification.message}
-                                        </Typography>
-                                        <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem' }}>
-                                            {new Date(notification.timestamp).toLocaleString()}
-                                        </Typography>
-                                    </TimelineContent>
-                                </TimelineItem>
-                            ))
+                            paginatedNotifications.map((notification, index) => {
+                                console.log(`Notification ${notification.id} read status: ${notification.read}`); // Debug log
+                                return (
+                                    <TimelineItem key={notification.id} sx={{ mb: 1 }}>
+                                        <TimelineSeparator>
+                                            <Badge
+                                                badgeContent={<CircleIcon sx={{ fontSize: 8 }} />}
+                                                sx={{
+                                                    '& .MuiBadge-badge': {
+                                                        width: 8,
+                                                        height: 8,
+                                                        borderRadius: '50%',
+                                                        minWidth: 0,
+                                                        p: 0,
+                                                        bgcolor: notification.read ? theme.palette.grey[500] : theme.palette.primary.main, // Explicit colors
+                                                    },
+                                                    ml: 0.5,
+                                                }}
+                                            />
+                                            {index < paginatedNotifications.length - 1 && (
+                                                <TimelineConnector sx={{ bgcolor: theme.palette.divider, width: 1, ml: 0.5 }} />
+                                            )}
+                                        </TimelineSeparator>
+                                        <TimelineContent sx={{ py: 0.5, pl: 1.5, pr: 0 }}>
+                                            <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '六年级rem' }}>
+                                                {notification.message}
+                                            </Typography>
+                                            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem' }}>
+                                                {new Date(notification.timestamp).toLocaleString()}
+                                            </Typography>
+                                        </TimelineContent>
+                                    </TimelineItem>
+                                );
+                            })
                         ) : (
                             <Typography variant="body2" sx={{ color: theme.palette.text.secondary, p: 1 }}>
                                 No notifications
