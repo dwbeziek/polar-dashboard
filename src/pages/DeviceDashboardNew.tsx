@@ -19,6 +19,7 @@ import {useEffect, useState} from "react";
 import {SensorData} from "../types/device";
 import {NotificationCard} from "../components/NotificationCard";
 import {DeviceLocationMonitor} from "../components/DeviceLocationMonitor";
+import {MapboxDeviceLocationMonitor} from "../components/MapboxDeviceLocationMonitor";
 
 export const DeviceDashboardNew = () => {
     const { id } = useParams<{ id: string }>();
@@ -165,7 +166,7 @@ export const DeviceDashboardNew = () => {
                     }}
                 >
                     <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, height: '100%' }}>
-                        <DeviceLocationMonitor deviceData={latest}/>
+                        <MapboxDeviceLocationMonitor deviceData={latest}/>
                     </CardContent>
                 </Card>
 

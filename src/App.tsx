@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { routes } from './routes/routes';
 import './i18n/i18n';
 import 'leaflet/dist/leaflet.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const queryClient = new QueryClient();
 
